@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logout } from '../../store/slices/authSlice';
 import AuthModal from '../auth/AuthModal';
+import Image from 'next/image';
 
 const Header: React.FC = () => {
   const pathname = usePathname();
@@ -79,8 +80,8 @@ const Header: React.FC = () => {
         <nav className={`${searchExpanded ? 'hidden md:block' : 'block'}`}>
           <ul className="flex space-x-8">
             <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400' : ''}`}>Home</Link></li>
-            <li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Articles</Link></li>
-            <li><Link href="/reviews" className={`hover:text-purple-400 transition-colors ${pathname.includes('/reviews') ? 'text-purple-400' : ''}`}>Reviews</Link></li>
+            <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname && pathname === '/' ? 'text-purple-400' : ''}`}>Home</Link></li>
+            <li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Articles</Link></li><li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Articles</Link></li>
             {isAdmin && (
               <li><Link href="/admin" className="hover:text-purple-400 transition-colors">Admin</Link></li>
             )}
@@ -122,10 +123,12 @@ const Header: React.FC = () => {
               className="flex items-center space-x-2"
               onClick={() => setUserMenuOpen(!userMenuOpen)}
             >
-              <img 
+              <Image 
                 src="https://picsum.photos/100/100?random=10" 
                 alt="User Avatar" 
-                className="w-8 h-8 rounded-full"
+                width={32}
+                height={32}
+                className="rounded-full object-cover"
               />
               <span className="hidden sm:inline">{user?.name || user?.email || 'User'}</span>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -213,9 +216,9 @@ const Header: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link 
+              <Link 
                   href="/articles" 
-                  className={`block hover:text-purple-400 transition-colors ${pathname.includes('/articles') ? 'text-purple-400' : ''}`}
+                  className={`block hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Articles
@@ -224,7 +227,7 @@ const Header: React.FC = () => {
               <li>
                 <Link 
                   href="/reviews" 
-                  className={`block hover:text-purple-400 transition-colors ${pathname.includes('/reviews') ? 'text-purple-400' : ''}`}
+                  className={`block hover:text-purple-400 transition-colors ${pathname && pathname.includes('/reviews') ? 'text-purple-400' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Reviews
@@ -247,10 +250,12 @@ const Header: React.FC = () => {
           <div className="mt-auto pt-6 border-t border-gray-800">
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <img 
+                <Image 
                   src="https://picsum.photos/100/100?random=10" 
                   alt="User Avatar" 
-                  className="w-10 h-10 rounded-full"
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover"
                 />
                 <div>
                   <p className="font-medium">{user?.name || user?.email || 'User'}</p>

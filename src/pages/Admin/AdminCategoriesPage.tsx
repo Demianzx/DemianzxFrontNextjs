@@ -32,7 +32,7 @@ const AdminCategoriesPage: React.FC = () => {
     { 
       header: 'Actions', 
       accessor: 'id',
-      render: (item: Category) => (
+      render: (_category: Category) => ( // Cambiamos "item" por "_category" (el guion bajo indica que es intencional no usarla)
         <div className="flex space-x-2">
           <button className="text-blue-400 hover:text-blue-300">Edit</button>
           <button className="text-red-400 hover:text-red-300">Delete</button>

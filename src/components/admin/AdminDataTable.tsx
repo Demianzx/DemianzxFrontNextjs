@@ -14,7 +14,7 @@ interface AdminDataTableProps<T> {
   onRowClick?: (item: T) => void;
 }
 
-function AdminDataTable<T extends Record<string, any>>({ 
+function AdminDataTable<T extends Record<string, unknown>>({ 
   columns, 
   data, 
   onRowClick 
