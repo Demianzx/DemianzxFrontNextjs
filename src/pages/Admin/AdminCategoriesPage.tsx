@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import AdminSectionHeader from '../../components/admin/AdminSectionHeader';
 import AdminDataTable from '../../components/admin/AdminDataTable';

@@ -1,12 +1,19 @@
+"use client";
+
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchPublicBlogPostBySlug, fetchBlogPostBySlug, fetchRelatedBlogPosts, incrementPostViewCount, clearCurrentPost } from '../../store/slices/blogsSlice';
 import ArticleMetaBar from '../../components/domain/ArticleMetaBar';
 import RelatedArticles from '../../components/domain/RelatedArticles';
 
-const ArticleDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+interface ArticleDetailPageProps {
+  id?: string;
+}
+
+const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => {
+  const params = useParams();
+  const id = propId || params?.id as string;
   const dispatch = useAppDispatch();
   
   // Seleccionamos los estados relevantes del store

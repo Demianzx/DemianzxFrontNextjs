@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import FeaturedArticle from '../../components/domain/FeaturedArticle';
 import ArticleCard from '../../components/domain/ArticleCard';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
@@ -97,7 +99,7 @@ const HomePage: React.FC = () => {
                 {popularPosts.map(post => (
                   <Link 
                       key={post.id} 
-                      to={`/articles/${post.slug || post.id}`}
+                      href={`/articles/${post.slug || post.id}`}
                       className="flex items-center space-x-4 p-2 hover:bg-gray-800 rounded-lg transition-colors"
                     >
                     <div className="w-16 h-16 flex-shrink-0 rounded overflow-hidden">

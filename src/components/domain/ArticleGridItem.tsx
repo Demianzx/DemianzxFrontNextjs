@@ -1,5 +1,7 @@
+"use client";
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import ProgressiveImage from '../common/ProgressiveImage';
 
 interface ArticleGridItemProps {
@@ -21,7 +23,7 @@ const ArticleGridItem: React.FC<ArticleGridItemProps> = ({
   
   return (
     <Link 
-      to={articleUrl}
+      href={articleUrl}
       className="block group overflow-hidden rounded-lg"
     >
       <div className="relative h-80 overflow-hidden">

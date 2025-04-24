@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter, useParams } from 'next/navigation';
 import Button from '../../components/common/Button';
 import RichTextEditor from '../../components/admin/RichTextEditor';
 
@@ -22,9 +24,14 @@ const categories = [
   { id: '8', name: 'Tutorials' },
 ];
 
-const AdminPostFormPage: React.FC = () => {
-  const { id } = useParams<{ id?: string }>();
-  const navigate = useNavigate();
+interface AdminPostFormPageProps {
+  id?: string;
+}
+
+const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => {
+  const params = useParams();
+  const router = useRouter();
+  const id = propId || params?.id as string;
   const isEditMode = !!id;
   
   const [formData, setFormData] = useState<PostFormData>({
@@ -70,12 +77,12 @@ const AdminPostFormPage: React.FC = () => {
     
     // Simulación de envío exitoso
     setTimeout(() => {
-      navigate('/admin/posts');
+      router.push('/admin/posts');
     }, 500);
   };
 
   const handleCancel = () => {
-    navigate('/admin/posts');
+    router.push('/admin/posts');
   };
 
   const handlePublish = () => {
@@ -132,11 +139,6 @@ const AdminPostFormPage: React.FC = () => {
               </option>
             ))}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div>
         </div>
         
         <div>

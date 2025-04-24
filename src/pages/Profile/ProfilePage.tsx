@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import { useAppSelector } from '../../store/hooks';
-import { Navigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import ProfileInfo from '../../components/profile/ProfileInfo';
 import ProfileSecurity from '../../components/profile/ProfileSecurity';
 import ProfileActivity from '../../components/profile/ProfileActivity';
@@ -8,10 +10,17 @@ import ProfileActivity from '../../components/profile/ProfileActivity';
 const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'info' | 'security' | 'activity'>('info');
   const { isAuthenticated, user } = useAppSelector(state => state.auth);
+  const router = useRouter();
   
   // Si el usuario no está autenticado, redirigir al inicio
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      router.replace('/');
+    }
+  }, [isAuthenticated, user, router]);
+  
   if (!isAuthenticated || !user) {
-    return <Navigate to="/" replace />;
+    return null; // No mostrar nada mientras se redirige
   }
   
   return (

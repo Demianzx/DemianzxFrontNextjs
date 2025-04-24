@@ -1,5 +1,7 @@
+"use client";
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Button from '../common/Button';
 
 interface FeaturedArticleProps {
@@ -36,7 +38,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
         <p className="text-gray-300 mb-6 max-w-2xl">
           {date} {excerpt}
         </p>
-        <Link to={articleUrl}>
+        <Link href={articleUrl}>
           <Button variant="primary" size="lg">Read More</Button>
         </Link>
       </div>

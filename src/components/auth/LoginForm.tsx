@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { login, clearAuthError } from '../../store/slices/authSlice';

@@ -1,5 +1,7 @@
+"use client";
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const Footer: React.FC = () => {
   return (
@@ -15,10 +17,10 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-bold mb-4 text-white">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="text-sm hover:text-purple-400 transition-colors">Home</Link></li>
-              <li><Link to="/articles" className="text-sm hover:text-purple-400 transition-colors">Articles</Link></li>
-              <li><Link to="/reviews" className="text-sm hover:text-purple-400 transition-colors">Reviews</Link></li>
-              <li><Link to="/about" className="text-sm hover:text-purple-400 transition-colors">About</Link></li>
+              <li><Link href="/" className="text-sm hover:text-purple-400 transition-colors">Home</Link></li>
+              <li><Link href="/articles" className="text-sm hover:text-purple-400 transition-colors">Articles</Link></li>
+              <li><Link href="/reviews" className="text-sm hover:text-purple-400 transition-colors">Reviews</Link></li>
+              <li><Link href="/about" className="text-sm hover:text-purple-400 transition-colors">About</Link></li>
             </ul>
           </div>
           <div>

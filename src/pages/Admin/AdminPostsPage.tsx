@@ -1,10 +1,12 @@
+"use client";
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import AdminSectionHeader from '../../components/admin/AdminSectionHeader';
 import AdminDataTable from '../../components/admin/AdminDataTable';
 
 const AdminPostsPage: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Definimos la interface para nuestro tipo de post
   interface Post {
@@ -66,11 +68,11 @@ const AdminPostsPage: React.FC = () => {
   ];
 
   const handleNewPost = () => {
-    navigate('/admin/posts/create');
+    router.push('/admin/posts/create');
   };
 
   const handleEditPost = (id: string) => {
-    navigate(`/admin/posts/edit/${id}`);
+    router.push(`/admin/posts/edit/${id}`);
   };
 
   const handleDeletePost = (id: string) => {
@@ -81,7 +83,7 @@ const AdminPostsPage: React.FC = () => {
   };
 
   const handleRowClick = (post: Post) => {
-    navigate(`/admin/posts/edit/${post.id}`);
+    router.push(`/admin/posts/edit/${post.id}`);
   };
 
   return (

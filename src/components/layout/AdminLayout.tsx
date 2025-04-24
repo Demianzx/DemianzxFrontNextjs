@@ -1,26 +1,40 @@
+"use client";
+
 import React, { useState } from 'react';
-import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { logout } from '../../store/slices/authSlice';
 import AdminBreadcrumb from '../admin/AdminBreadcrumb';
 
-const AdminLayout: React.FC = () => {
-  const location = useLocation();
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+  const pathname = usePathname();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const { isAuthenticated, user } = useAppSelector(state => state.auth);
   
   // Si el usuario no está autenticado o no es admin, redirigir al inicio
+  React.useEffect(() => {
+    if (!isAuthenticated || user?.role !== 'Admin') {
+      router.replace('/');
+    }
+  }, [isAuthenticated, user, router]);
+  
   if (!isAuthenticated || user?.role !== 'Admin') {
-    return <Navigate to="/" replace />;
+    return null; // No mostrar nada mientras se redirige
   }
   
   const isActiveRoute = (path: string) => {
-    if (path === '/admin' && location.pathname === '/admin') {
+    if (path === '/admin' && pathname === '/admin') {
       return true;
     }
-    if (path !== '/admin' && location.pathname.startsWith(path)) {
+    if (path !== '/admin' && pathname?.startsWith(path)) {
       return true;
     }
     return false;
@@ -28,6 +42,7 @@ const AdminLayout: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    router.push('/');
   };
 
   return (
@@ -45,17 +60,17 @@ const AdminLayout: React.FC = () => {
             </svg>
           </button>
           
-          <Link to="/" className="text-2xl font-bold">
+          <Link href="/" className="text-2xl font-bold">
             <span className="text-white">DEMIANZX</span>
             <span className="text-purple-500"> GAMES</span>
           </Link>
         </div>
         
         <div className="flex items-center space-x-6">
-          <Link to="/admin" className="hidden sm:block hover:text-purple-400 transition-colors">
+          <Link href="/admin" className="hidden sm:block hover:text-purple-400 transition-colors">
             Admin
           </Link>
-          <Link to="/admin" className="hidden sm:block hover:text-purple-400 transition-colors">
+          <Link href="/admin" className="hidden sm:block hover:text-purple-400 transition-colors">
             Dashboard
           </Link>
           <div className="relative group">
@@ -72,7 +87,7 @@ const AdminLayout: React.FC = () => {
             </button>
             
             <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-              <Link to="/profile" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Profile</Link>
+              <Link href="/profile" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Profile</Link>
               <button 
                 onClick={handleLogout}
                 className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
@@ -119,9 +134,9 @@ const AdminLayout: React.FC = () => {
             <ul className="space-y-2">
               <li>
                 <Link 
-                  to="/admin" 
+                  href="/admin" 
                   className={`block px-4 py-2 rounded-md ${
-                    isActiveRoute('/admin') && location.pathname === '/admin'
+                    isActiveRoute('/admin') && pathname === '/admin'
                       ? 'bg-gray-800 text-white'
                       : 'text-gray-400 hover:bg-gray-800 hover:text-white'
                   }`}
@@ -132,7 +147,7 @@ const AdminLayout: React.FC = () => {
               </li>
               <li>
                 <Link 
-                  to="/admin/posts" 
+                  href="/admin/posts" 
                   className={`block px-4 py-2 rounded-md ${
                     isActiveRoute('/admin/posts')
                       ? 'bg-gray-800 text-white'
@@ -145,7 +160,7 @@ const AdminLayout: React.FC = () => {
               </li>
               <li>
                 <Link 
-                  to="/admin/categories" 
+                  href="/admin/categories" 
                   className={`block px-4 py-2 rounded-md ${
                     isActiveRoute('/admin/categories')
                       ? 'bg-gray-800 text-white'
@@ -158,7 +173,7 @@ const AdminLayout: React.FC = () => {
               </li>
               <li>
                 <Link 
-                  to="/admin/users" 
+                  href="/admin/users" 
                   className={`block px-4 py-2 rounded-md ${
                     isActiveRoute('/admin/users')
                       ? 'bg-gray-800 text-white'
@@ -171,7 +186,7 @@ const AdminLayout: React.FC = () => {
               </li>
               <li>
                 <Link 
-                  to="/admin/settings" 
+                  href="/admin/settings" 
                   className={`block px-4 py-2 rounded-md ${
                     isActiveRoute('/admin/settings')
                       ? 'bg-gray-800 text-white'
@@ -199,7 +214,7 @@ const AdminLayout: React.FC = () => {
         {/* Main content */}
         <main className="flex-grow p-6 md:ml-0 w-full">
           <AdminBreadcrumb />
-          <Outlet />
+          {children}
         </main>
       </div>
     </div>

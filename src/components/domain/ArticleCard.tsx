@@ -1,5 +1,7 @@
+"use client";
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Card from '../common/Card';
 
 interface ArticleCardProps {
@@ -23,7 +25,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   
   return (
     <Card className="h-full">
-      <Link to={articleUrl}>
+      <Link href={articleUrl}>
         <div className="h-48 overflow-hidden">
           <img
             src={imageUrl}

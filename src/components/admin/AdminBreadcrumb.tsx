@@ -1,12 +1,17 @@
+"use client";
+
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const AdminBreadcrumb: React.FC = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   
   // Función para generar las rutas de migas de pan
   const getBreadcrumbs = () => {
-    const pathParts = location.pathname.split('/').filter(Boolean);
+    if (!pathname) return [];
+    
+    const pathParts = pathname.split('/').filter(Boolean);
     let currentPath = '';
     
     // Siempre incluimos Admin como primer elemento
@@ -60,7 +65,7 @@ const AdminBreadcrumb: React.FC = () => {
             <span className="text-white">{crumb.label}</span>
           ) : (
             <Link 
-              to={crumb.path}
+              href={crumb.path}
               className="hover:text-purple-400 transition-colors"
             >
               {crumb.label}

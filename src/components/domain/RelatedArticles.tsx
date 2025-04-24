@@ -1,5 +1,7 @@
+"use client";
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface RelatedArticle {
   id: string;
@@ -26,7 +28,7 @@ const RelatedArticles: React.FC<RelatedArticlesProps> = ({ articles, currentArti
         {filteredArticles.slice(0, 3).map(article => (
           <Link 
             key={article.id}
-            to={`/articles/${article.id}`}
+            href={`/articles/${article.id}`}
             className="group"
           >
             <div className="overflow-hidden rounded-lg mb-3">

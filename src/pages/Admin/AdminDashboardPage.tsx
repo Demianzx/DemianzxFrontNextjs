@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import StatsCard from '../../components/admin/StatsCard';
 import RecentItem from '../../components/admin/RecentItem';
