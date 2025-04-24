@@ -31,6 +31,8 @@ const ArticleGridItem: React.FC<ArticleGridItemProps> = ({
           src={imageUrl}
           alt={title}
           className="transition-transform duration-500 ease-in-out group-hover:scale-105"
+          width={600}
+          height={320}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
         <div className="absolute bottom-0 left-0 right-0 p-6">

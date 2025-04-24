@@ -20,7 +20,7 @@ const Header: React.FC = () => {
   // Obtener el estado de autenticación y usuario de Redux
   const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
   const user = useAppSelector(state => state.auth.user);
-  const isAdmin = user?.role === 'Admin';
+  const isAdmin = user?.role === 'Administrator';
   
   const handleLogout = () => {
     dispatch(logout());

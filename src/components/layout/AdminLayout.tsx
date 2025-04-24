@@ -17,17 +17,28 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const { isAuthenticated, user } = useAppSelector(state => state.auth);
   
   // Si el usuario no está autenticado o no es admin, redirigir al inicio
   React.useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'Admin') {
+    if (!isAuthenticated || (user?.role !== 'Administrator' && user?.role !== 'Admin')) {
       router.replace('/');
+    } else {
+      setIsLoading(false);
     }
   }, [isAuthenticated, user, router]);
   
-  if (!isAuthenticated || user?.role !== 'Admin') {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
+  
+  if (!isAuthenticated || user?.role !== 'Administrator') {
     return null; // No mostrar nada mientras se redirige
   }
   
@@ -79,6 +90,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <Image 
                 src="https://picsum.photos/100/100?random=10" 
                 alt="Admin Avatar" 
+                width={100}
+                height={100}
                 className="w-8 h-8 rounded-full"
               />
               <span className="hidden sm:inline">{user?.name || user?.email || 'Admin'}</span>
