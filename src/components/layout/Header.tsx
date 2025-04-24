@@ -79,9 +79,8 @@ const Header: React.FC = () => {
       <div className="hidden md:flex items-center space-x-6">
         <nav className={`${searchExpanded ? 'hidden md:block' : 'block'}`}>
           <ul className="flex space-x-8">
-            <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400' : ''}`}>Home</Link></li>
-            <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname && pathname === '/' ? 'text-purple-400' : ''}`}>Home</Link></li>
-            <li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Articles</Link></li><li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Articles</Link></li>
+          <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400' : ''}`}>Home</Link></li>
+          <li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Articles</Link></li>
             {isAdmin && (
               <li><Link href="/admin" className="hover:text-purple-400 transition-colors">Admin</Link></li>
             )}
