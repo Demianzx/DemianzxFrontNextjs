@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import ProfileInfo from '../../components/profile/ProfileInfo';
 import ProfileSecurity from '../../components/profile/ProfileSecurity';
 import ProfileActivity from '../../components/profile/ProfileActivity';
+import Image from 'next/image';
 
 const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'info' | 'security' | 'activity'>('info');
@@ -32,7 +33,7 @@ const ProfilePage: React.FC = () => {
         <div className="md:col-span-1">
           <div className="bg-gray-800 rounded-lg p-4">
             <div className="flex flex-col items-center mb-6">
-              <img 
+              <Image 
                 src="https://picsum.photos/200/200?random=10" 
                 alt="User Avatar" 
                 className="w-24 h-24 rounded-full mb-4"

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { logout } from '../../store/slices/authSlice';
 import AdminBreadcrumb from '../admin/AdminBreadcrumb';
+import Image from 'next/image';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -75,7 +76,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           </Link>
           <div className="relative group">
             <button className="flex items-center space-x-2">
-              <img 
+              <Image 
                 src="https://picsum.photos/100/100?random=10" 
                 alt="Admin Avatar" 
                 className="w-8 h-8 rounded-full"
