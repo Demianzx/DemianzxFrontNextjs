@@ -25,8 +25,12 @@ interface AuthState {
   error: string | null;
 }
 
-// MODIFICACIÓN: También guardar datos del usuario en localStorage
+// Función segura para obtener usuario del storage
 const getUserFromStorage = (): AuthState['user'] => {
+  if (typeof window === 'undefined') {
+    return null; // Estamos en el servidor, no hay localStorage
+  }
+  
   const userString = localStorage.getItem('user');
   if (userString) {
     try {
@@ -38,47 +42,16 @@ const getUserFromStorage = (): AuthState['user'] => {
   return null;
 };
 
-// Inicializar el estado con datos del localStorage si existen
+// Estado inicial seguro para SSR
 const initialState: AuthState = {
-  user: getUserFromStorage(),
+  user: null,
   isAuthenticated: false,
-  token: localStorage.getItem('token'),
+  token: null,
   isLoading: false,
   error: null
 };
 
-// Si ya hay un token, intentamos inicializar el usuario
-if (initialState.token) {
-  try {
-    const decodedToken = jwtDecode<JwtPayload>(initialState.token);
-    // Verificar si el token no ha expirado
-    if (decodedToken.exp * 1000 > Date.now()) {
-      // Si ya tenemos datos del usuario desde localStorage, usamos esos
-      if (!initialState.user) {
-        initialState.user = {
-          id: decodedToken.sub,
-          email: decodedToken.email,
-          role: decodedToken.role,
-          name: decodedToken.name
-        };
-      }
-      initialState.isAuthenticated = true;
-    } else {
-      // Si el token ha expirado, limpiamos el localStorage
-      localStorage.removeItem('token');
-      localStorage.removeItem('user'); // AÑADIDO: También eliminamos info de usuario
-      initialState.token = null;
-      initialState.user = null;
-    }
-  } catch (e) {
-    // Si hay algún error al decodificar el token, limpiamos el localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('user'); // AÑADIDO: También eliminamos info de usuario
-    initialState.token = null;
-    initialState.user = null;
-  }
-}
-
+// Inicialización del cliente de API
 const usersClient = new UsersClient('', apiClient);
 
 // Thunks
@@ -112,7 +85,7 @@ export const login = createAsyncThunk(
           name: decodedToken.name || response.userName
         };
         
-        // AÑADIDO: Guardar información del usuario en localStorage
+        // Guardar información del usuario en localStorage
         localStorage.setItem('user', JSON.stringify(user));
         
         return {
@@ -125,12 +98,12 @@ export const login = createAsyncThunk(
         // Si no podemos decodificar el token, usamos los datos de la respuesta
         const user = {
           id: 'unknown',
-          email: credentials.email, // Usar email del login para garantizar string
+          email: credentials.email,
           role: response.roles?.[0],
           name: response.userName || undefined
         };
         
-        // AÑADIDO: Guardar información del usuario en localStorage incluso con error
+        // Guardar información del usuario en localStorage incluso con error
         localStorage.setItem('user', JSON.stringify(user));
         
         return {
@@ -213,11 +186,13 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      // Eliminar token del localStorage
-      localStorage.removeItem('token');
-      localStorage.removeItem('user'); 
-      localStorage.removeItem('rol'); 
-      localStorage.removeItem('email'); 
+      // Solo ejecutar en el cliente
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('rol');
+        localStorage.removeItem('email');
+      }
       
       // Restablecer el estado
       state.user = null;
@@ -226,6 +201,42 @@ const authSlice = createSlice({
     },
     clearAuthError: (state) => {
       state.error = null;
+    },
+    initializeAuth: (state) => {
+      // Solo ejecutar en el cliente
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        const user = getUserFromStorage();
+        
+        if (token) {
+          try {
+            const decodedToken = jwtDecode<JwtPayload>(token);
+            // Verificar si el token no ha expirado
+            if (decodedToken.exp * 1000 > Date.now()) {
+              state.token = token;
+              state.user = user || {
+                id: decodedToken.sub,
+                email: decodedToken.email,
+                role: decodedToken.role,
+                name: decodedToken.name
+              };
+              state.isAuthenticated = true;
+            } else {
+              // Si el token ha expirado, limpiamos el localStorage
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              localStorage.removeItem('rol');
+              localStorage.removeItem('email');
+            }
+          } catch (e) {
+            // Si hay algún error al decodificar el token, limpiamos el localStorage
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('rol');
+            localStorage.removeItem('email');
+          }
+        }
+      }
     }
   },
   extraReducers: (builder) => {
@@ -262,6 +273,6 @@ const authSlice = createSlice({
   }
 });
 
-export const { logout, clearAuthError } = authSlice.actions;
+export const { logout, clearAuthError, initializeAuth } = authSlice.actions;
 
 export default authSlice.reducer;
