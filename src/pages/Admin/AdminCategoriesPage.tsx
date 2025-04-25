@@ -1,41 +1,74 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import AdminSectionHeader from '../../components/admin/AdminSectionHeader';
-import AdminDataTable from '../../components/admin/AdminDataTable';
+import AdminDataTable, { Column } from '../../components/admin/AdminDataTable';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { fetchCategories } from '../../store/slices/categoriesSlice';
+
+// Definimos la interface para nuestro tipo de categoría adaptada para la tabla
+interface CategoryTableItem extends Record<string, unknown> {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+}
 
 const AdminCategoriesPage: React.FC = () => {
-  // Datos de ejemplo (en una implementación real, estos vendrían de una API)
-  const categories = [
-    { id: '1', name: 'PC Games', postsCount: 45, createdAt: 'January 15, 2024' },
-    { id: '2', name: 'Console Games', postsCount: 32, createdAt: 'January 20, 2024' },
-    { id: '3', name: 'Mobile Games', postsCount: 28, createdAt: 'February 5, 2024' },
-    { id: '4', name: 'VR Games', postsCount: 15, createdAt: 'February 10, 2024' },
-    { id: '5', name: 'Indie Games', postsCount: 23, createdAt: 'March 1, 2024' },
-    { id: '6', name: 'Game Reviews', postsCount: 37, createdAt: 'March 10, 2024' },
-    { id: '7', name: 'Gaming News', postsCount: 52, createdAt: 'March 15, 2024' },
-    { id: '8', name: 'Tutorials', postsCount: 19, createdAt: 'April 1, 2024' },
-  ];
+  const dispatch = useAppDispatch();
+  
+  // Obtener las categorías del store
+  const { items: categoriesFromStore, isLoading, error } = useAppSelector(state => state.categories);
 
-  // Definimos la interface para nuestro tipo de categoría
-  interface Category {
-    id: string;
-    name: string;
-    postsCount: number;
-    createdAt: string;
-  }
+  // Cargar las categorías al montar el componente
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
-  const columns = [
+  // Convertir las categorías al formato que espera la tabla
+  const categories: CategoryTableItem[] = categoriesFromStore.map(cat => ({
+    id: cat.id,
+    name: cat.name,
+    slug: cat.slug,
+    description: cat.description || 'No description'
+  }));
+
+  // Definimos las columnas con el tipo adecuado
+  const columns: Column<CategoryTableItem>[] = [
     { header: 'Category Name', accessor: 'name' },
-    { header: 'Posts Count', accessor: 'postsCount' },
-    { header: 'Created Date', accessor: 'createdAt' },
+    { header: 'Slug', accessor: 'slug' },
+    { 
+      header: 'Description', 
+      accessor: 'description',
+      render: (item: CategoryTableItem) => (
+        <div className="max-w-xs truncate">
+          {item.description || 'No description'}
+        </div>
+      )
+    },
     { 
       header: 'Actions', 
       accessor: 'id',
-      render: (_category: Category) => ( // Cambiamos "item" por "_category" (el guion bajo indica que es intencional no usarla)
+      render: (item: CategoryTableItem) => (
         <div className="flex space-x-2">
-          <button className="text-blue-400 hover:text-blue-300">Edit</button>
-          <button className="text-red-400 hover:text-red-300">Delete</button>
+          <button 
+            className="text-blue-400 hover:text-blue-300"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditCategory(item.id);
+            }}
+          >
+            Edit
+          </button>
+          <button 
+            className="text-red-400 hover:text-red-300"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteCategory(item.id);
+            }}
+          >
+            Delete
+          </button>
         </div>
       )
     }
@@ -46,6 +79,33 @@ const AdminCategoriesPage: React.FC = () => {
     console.log('Create new category');
   };
 
+  const handleEditCategory = (id: number) => {
+    // En una implementación real, esto abriría un modal para editar la categoría
+    console.log('Edit category:', id);
+  };
+
+  const handleDeleteCategory = (id: number) => {
+    // En una implementación real, esto mostraría un diálogo de confirmación
+    console.log('Delete category:', id);
+    alert(`Category with ID ${id} would be deleted`);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-900 text-white p-4 rounded-md">
+        Error loading categories: {error}
+      </div>
+    );
+  }
+
   return (
     <div>
       <AdminSectionHeader 
@@ -54,7 +114,7 @@ const AdminCategoriesPage: React.FC = () => {
         onButtonClick={handleNewCategory} 
       />
       
-      <AdminDataTable
+      <AdminDataTable<CategoryTableItem>
         columns={columns}
         data={categories}
       />

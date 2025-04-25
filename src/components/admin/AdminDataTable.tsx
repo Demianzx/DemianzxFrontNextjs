@@ -2,18 +2,21 @@
 
 import React from 'react';
 
-interface Column<T> {
+// Definir la interfaz Column con un tipo genérico T
+export interface Column<T> {
   header: string;
   accessor: keyof T | string;
   render?: (item: T) => React.ReactNode;
 }
 
-interface AdminDataTableProps<T> {
+// La interfaz AdminDataTableProps ahora tiene un tipo genérico T
+export interface AdminDataTableProps<T> {
   columns: Column<T>[];
   data: T[];
   onRowClick?: (item: T) => void;
 }
 
+// La función ahora usa un tipo genérico T que extiende Record<string, unknown>
 function AdminDataTable<T extends Record<string, unknown>>({ 
   columns, 
   data, 

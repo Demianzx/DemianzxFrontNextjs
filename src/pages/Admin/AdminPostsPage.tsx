@@ -1,49 +1,46 @@
-// src/pages/Admin/AdminPostsPage.tsx (modificado)
 "use client";
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSectionHeader from '../../components/admin/AdminSectionHeader';
-import AdminDataTable from '../../components/admin/AdminDataTable';
+import AdminDataTable, { Column } from '../../components/admin/AdminDataTable';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchBlogPosts } from '../../store/slices/blogsSlice';
 import Image from 'next/image';
+
+// Definimos la interface para nuestro tipo de post para la tabla
+interface PostTableItem extends Record<string, unknown> {
+  id: string | number;
+  title: string;
+  status: string;
+  date: string;
+  author: string;
+  thumbnailImageUrl?: string;
+}
 
 const AdminPostsPage: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   
-  // Obtener los posts del store
   const { items: posts, isLoading, error } = useAppSelector(state => state.blogs.posts);
 
-  // Cargar los posts al montar el componente
   useEffect(() => {
     dispatch(fetchBlogPosts({ 
       page: 1, 
       pageSize: 20, 
-      includeDrafts: true // Incluir borradores
+      includeDrafts: true 
     }));
   }, [dispatch]);
 
-  // Definimos la interface para nuestro tipo de post
-  interface Post {
-    id: string | number;
-    title: string;
-    status: string;
-    date: string;
-    author: string;
-    thumbnailImageUrl?: string;
-  }
-
-  const columns = [
+  const columns: Column<PostTableItem>[] = [
     { 
       header: 'Thumbnail', 
       accessor: 'thumbnailImageUrl',
-      render: (item: Post) => (
+      render: (item: PostTableItem) => (
         <div className="w-16 h-16 overflow-hidden rounded">
           <Image 
-            src={item.thumbnailImageUrl || 'https://picsum.photos/100/100?random=1'} 
-            alt={item.title}
+            src={item.thumbnailImageUrl as string || 'https://picsum.photos/100/100?random=1'} 
+            alt={item.title as string}
             className="w-full h-full object-cover"
             width={64}
             height={64}
@@ -54,7 +51,7 @@ const AdminPostsPage: React.FC = () => {
     },
     { header: 'Title', accessor: 'title' },
     { header: 'Status', accessor: 'status',
-      render: (item: Post) => (
+      render: (item: PostTableItem) => (
         <span className={`px-2 py-1 rounded-full text-xs ${
           item.status === 'Published' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'
         }`}>
@@ -67,7 +64,7 @@ const AdminPostsPage: React.FC = () => {
     { 
       header: 'Actions', 
       accessor: 'id',
-      render: (item: Post) => (
+      render: (item: PostTableItem) => (
         <div className="flex space-x-2">
           <button 
             className="text-blue-400 hover:text-blue-300"
@@ -91,9 +88,7 @@ const AdminPostsPage: React.FC = () => {
       )
     }
   ];
-
-  // Transformar los posts de la API al formato que espera la tabla
-  const tableData = posts.map(post => ({
+  const tableData: PostTableItem[] = posts.map(post => ({
     id: post.id,
     title: post.title,
     status: post.isPublished ? 'Published' : 'Draft',
@@ -113,13 +108,11 @@ const AdminPostsPage: React.FC = () => {
   };
 
   const handleDeletePost = (id: string | number) => {
-    // En una implementación real, esto mostraría un diálogo de confirmación
-    // y luego eliminaría el post a través de una API
     console.log('Delete post:', id);
     alert(`Post with ID ${id} would be deleted`);
   };
 
-  const handleRowClick = (post: Post) => {
+  const handleRowClick = (post: PostTableItem) => {
     router.push(`/admin/posts/edit/${post.id}`);
   };
 
@@ -147,7 +140,7 @@ const AdminPostsPage: React.FC = () => {
         onButtonClick={handleNewPost} 
       />
       
-      <AdminDataTable
+      <AdminDataTable<PostTableItem>
         columns={columns}
         data={tableData}
         onRowClick={handleRowClick}
