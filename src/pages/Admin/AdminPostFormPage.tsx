@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Button from '../../components/common/Button';
-import MdxEditor from '../../components/admin/MdxEditor';
+import SimpleMarkdownEditor from '../../components/admin/SimpleMarkdownEditor';
 import ImageUploader from '../../components/admin/ImageUploader';
 import MultiSelect, { Option } from '../../components/admin/MultiSelect';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -308,10 +308,11 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
           <label htmlFor="content" className="block text-lg mb-2">
             Content
           </label>
-          <MdxEditor
+          <SimpleMarkdownEditor
             value={formData.content}
             onChange={handleContentChange}
             placeholder="Write your post content here..."
+            height={400}
           />
         </div>
         

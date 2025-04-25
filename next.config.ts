@@ -6,6 +6,15 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['picsum.photos'],
   },
+  webpack: (config) => {
+    // Configuración para manejar estilos CSS de los módulos de markdown
+    config.module.rules.push({
+      test: /\.css$/i,
+      use: ['style-loader', 'css-loader'],
+    });
+    
+    return config;
+  },
 };
 
 export default nextConfig;
