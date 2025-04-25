@@ -12,13 +12,22 @@ const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'info' | 'security' | 'activity'>('info');
   const { isAuthenticated, user } = useAppSelector(state => state.auth);
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   
-  // Si el usuario no está autenticado, redirigir al inicio
   useEffect(() => {
+    setMounted(true);
     if (!isAuthenticated || !user) {
       router.replace('/');
     }
   }, [isAuthenticated, user, router]);
+  
+  if (!mounted) {
+    return (
+      <div className="container mx-auto py-10 px-4 flex justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
   
   if (!isAuthenticated || !user) {
     return null; // No mostrar nada mientras se redirige
@@ -37,6 +46,9 @@ const ProfilePage: React.FC = () => {
                 src="https://picsum.photos/200/200?random=10" 
                 alt="User Avatar" 
                 className="w-24 h-24 rounded-full mb-4"
+                width={96}
+                height={96}
+                unoptimized
               />
               <h2 className="text-xl font-semibold">{user.name || 'User'}</h2>
               <p className="text-gray-400 text-sm">{user.email}</p>
