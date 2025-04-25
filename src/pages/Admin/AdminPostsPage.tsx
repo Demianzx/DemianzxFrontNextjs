@@ -1,32 +1,57 @@
+// src/pages/Admin/AdminPostsPage.tsx (modificado)
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSectionHeader from '../../components/admin/AdminSectionHeader';
 import AdminDataTable from '../../components/admin/AdminDataTable';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { fetchBlogPosts } from '../../store/slices/blogsSlice';
+import Image from 'next/image';
 
 const AdminPostsPage: React.FC = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  
+  // Obtener los posts del store
+  const { items: posts, isLoading, error } = useAppSelector(state => state.blogs.posts);
+
+  // Cargar los posts al montar el componente
+  useEffect(() => {
+    dispatch(fetchBlogPosts({ 
+      page: 1, 
+      pageSize: 20, 
+      includeDrafts: true // Incluir borradores
+    }));
+  }, [dispatch]);
 
   // Definimos la interface para nuestro tipo de post
   interface Post {
-    id: string;
+    id: string | number;
     title: string;
     status: string;
     date: string;
     author: string;
+    thumbnailImageUrl?: string;
   }
 
-  // Datos de ejemplo (en una implementación real, estos vendrían de una API)
-  const posts = [
-    { id: '1', title: 'The Future of Virtual Reality Gaming', status: 'Published', date: 'April 24, 2024', author: 'John Doe' },
-    { id: '2', title: 'Top 10 FPS Games of 2024', status: 'Published', date: 'April 20, 2024', author: 'Jane Smith' },
-    { id: '3', title: 'Exploring the World of Indie Games', status: 'Draft', date: 'April 18, 2024', author: 'John Doe' },
-    { id: '4', title: 'The Evolution of Racing Games', status: 'Published', date: 'April 15, 2024', author: 'Mike Johnson' },
-    { id: '5', title: 'Mobile Gaming: The New Frontier', status: 'Draft', date: 'April 10, 2024', author: 'Sarah Wilson' },
-  ];
-
   const columns = [
+    { 
+      header: 'Thumbnail', 
+      accessor: 'thumbnailImageUrl',
+      render: (item: Post) => (
+        <div className="w-16 h-16 overflow-hidden rounded">
+          <Image 
+            src={item.thumbnailImageUrl || 'https://picsum.photos/100/100?random=1'} 
+            alt={item.title}
+            className="w-full h-full object-cover"
+            width={64}
+            height={64}
+            unoptimized
+          />
+        </div>
+      )
+    },
     { header: 'Title', accessor: 'title' },
     { header: 'Status', accessor: 'status',
       render: (item: Post) => (
@@ -67,15 +92,27 @@ const AdminPostsPage: React.FC = () => {
     }
   ];
 
+  // Transformar los posts de la API al formato que espera la tabla
+  const tableData = posts.map(post => ({
+    id: post.id,
+    title: post.title,
+    status: post.isPublished ? 'Published' : 'Draft',
+    date: post.publishedDate 
+      ? new Date(post.publishedDate).toLocaleDateString() 
+      : 'Not published',
+    author: post.authorName || 'Unknown',
+    thumbnailImageUrl: post.thumbnailImageUrl
+  }));
+
   const handleNewPost = () => {
     router.push('/admin/posts/create');
   };
 
-  const handleEditPost = (id: string) => {
+  const handleEditPost = (id: string | number) => {
     router.push(`/admin/posts/edit/${id}`);
   };
 
-  const handleDeletePost = (id: string) => {
+  const handleDeletePost = (id: string | number) => {
     // En una implementación real, esto mostraría un diálogo de confirmación
     // y luego eliminaría el post a través de una API
     console.log('Delete post:', id);
@@ -85,6 +122,22 @@ const AdminPostsPage: React.FC = () => {
   const handleRowClick = (post: Post) => {
     router.push(`/admin/posts/edit/${post.id}`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-900 text-white p-4 rounded-md">
+        Error loading posts: {error}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -96,7 +149,7 @@ const AdminPostsPage: React.FC = () => {
       
       <AdminDataTable
         columns={columns}
-        data={posts}
+        data={tableData}
         onRowClick={handleRowClick}
       />
     </div>
