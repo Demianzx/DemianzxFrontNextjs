@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchPublicBlogPostBySlug, fetchBlogPostBySlug, fetchRelatedBlogPosts, incrementPostViewCount, clearCurrentPost } from '../../store/slices/blogsSlice';
 import ArticleMetaBar from '../../components/domain/ArticleMetaBar';
 import RelatedArticles from '../../components/domain/RelatedArticles';
+import MarkdownRenderer from '../../components/common/MarkdownRenderer';
 
 interface ArticleDetailPageProps {
   id?: string;
@@ -24,34 +25,25 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => 
   
   useEffect(() => {
     if (id) {
-      // Limpiar el post actual antes de cargar uno nuevo
       dispatch(clearCurrentPost());
       
-      // Intentar cargar el artículo por slug o id
       const isNumeric = !isNaN(Number(id));
       
       if (isNumeric) {
-        // Si es un ID numérico
         dispatch(incrementPostViewCount(Number(id)));
-        // Aquí necesitaríamos un método para obtener por ID
-        // Por ahora, intentaremos obtenerlo como si fuera un slug
         dispatch(fetchBlogPostBySlug(id));
       } else {
-        // Si es un slug, cargamos el artículo por slug
         dispatch(fetchPublicBlogPostBySlug(id));
       }
     }
     
     return () => {
-      // Limpiar el post al desmontar el componente
       dispatch(clearCurrentPost());
     };
   }, [id, dispatch]);
   
-  // Cargar artículos relacionados cuando tengamos el artículo principal
   useEffect(() => {
     if (article && article.id) {
-      // El segundo parámetro sería el ID del post, que en este caso es el mismo que el ID de categoría
       dispatch(fetchRelatedBlogPosts({ 
         id: article.categories[0]?.id || 0, 
         postId: article.id, 
@@ -123,9 +115,7 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => 
               authorAvatar={'https://picsum.photos/100/100?random=10'} // Debería venir del usuario
             />
             
-            <div className="prose prose-lg prose-invert max-w-none">
-              <div dangerouslySetInnerHTML={{ __html: article.content }} />
-            </div>
+            <MarkdownRenderer content={article.content} className="prose-lg" />
             
             {/* Tags */}
             <div className="mt-12 flex flex-wrap gap-2">
