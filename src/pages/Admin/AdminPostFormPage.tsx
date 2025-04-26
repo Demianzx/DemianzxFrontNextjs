@@ -211,22 +211,31 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
       }
       
       router.push('/admin/posts');
-    } catch (error: any) {
+    } catch (error: unknown) {
+      // Convertir el error a string de manera segura
+      const errorMessage = error instanceof Error ? error.message : 'Error saving post';
+      
       dispatch(addNotification({
         type: 'error',
-        message: error.message || 'Error saving post'
+        message: errorMessage
       }));
     } finally {
       setIsSubmitting(false);
     }
   };
   
-  const handleSaveAsDraft = (e: React.FormEvent) => {
-    handleSubmit(e, 'draft');
+  // Estos manejadores llaman a handleSubmit con un parámetro, pero
+  // los pasamos como callbacks a botones, por lo que necesitamos adaptarlos
+  const handleSaveAsDraft = () => {
+    // Creamos un evento sintético básico para pasarlo a handleSubmit
+    const syntheticEvent = { preventDefault: () => {} } as React.FormEvent;
+    handleSubmit(syntheticEvent, 'draft');
   };
   
-  const handlePublish = (e: React.FormEvent) => {
-    handleSubmit(e, 'published');
+  const handlePublish = () => {
+    // Creamos un evento sintético básico para pasarlo a handleSubmit
+    const syntheticEvent = { preventDefault: () => {} } as React.FormEvent;
+    handleSubmit(syntheticEvent, 'published');
   };
   
   const handleCancel = () => {
@@ -245,7 +254,7 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
     <div>
       <h1 className="text-3xl font-bold mb-8">{isEditMode ? 'Edit Post' : 'Create Post'}</h1>
       
-      <form onSubmit={handleSaveAsDraft} className="space-y-6">
+      <form onSubmit={(e) => handleSubmit(e, 'draft')} className="space-y-6">
         {/* Título */}
         <div>
           <label htmlFor="title" className="block text-lg mb-2">
@@ -328,8 +337,9 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
           </Button>
           
           <Button
-            type="submit"
+            type="button"
             variant="secondary"
+            onClick={handleSaveAsDraft}
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Saving...' : 'Save as Draft'}
@@ -348,3 +358,5 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
     </div>
   );
 };
+
+export default AdminPostFormPage;

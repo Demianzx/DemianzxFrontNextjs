@@ -4,6 +4,7 @@ import categoriesReducer from './slices/categoriesSlice';
 import tagsReducer from './slices/tagsSlice';
 import authReducer from './slices/authSlice';
 import uiReducer from './slices/uiSlice';
+import mediaReducer from './slices/mediaSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     categories: categoriesReducer,
     tags: tagsReducer,
     auth: authReducer,
-    ui: uiReducer
+    ui: uiReducer,
+    media: mediaReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
