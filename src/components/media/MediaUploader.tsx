@@ -14,14 +14,34 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
 }) => {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { currentUpload } = useAppSelector(state => state.media);
   
-  // Manejar el cambio en el input de archivo
+  const validateFile = (file: File): boolean => {
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setError(`Invalid file type. Supported types: JPG, PNG, GIF, SVG, WEBP`);
+      return false;
+    }
+    
+    const maxSize = 5 * 1024 * 1024; 
+    if (file.size > maxSize) {
+      setError(`File too large. Maximum size: 5MB`);
+      return false;
+    }
+    
+    setError(null);
+    return true;
+  };
+  
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      if (validateFile(file)) {
+        setSelectedFile(file);
+      }
     }
   };
   
@@ -32,7 +52,10 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
     setDragActive(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setSelectedFile(e.dataTransfer.files[0]);
+      const file = e.dataTransfer.files[0];
+      if (validateFile(file)) {
+        setSelectedFile(file);
+      }
     }
   };
   
@@ -62,9 +85,15 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   };
   
   // Manejar subida de archivo
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedFile) {
-      onUpload(selectedFile);
+      setError(null);
+      try {
+        await onUpload(selectedFile);
+      } catch (err) {
+        console.error('Upload failed:', err);
+        setError('Failed to upload file. Please try again.');
+      }
     }
   };
 
@@ -81,6 +110,12 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
           </svg>
         </button>
       </div>
+      
+      {error && (
+        <div className="bg-red-900 text-white p-3 rounded-md mb-4">
+          {error}
+        </div>
+      )}
       
       <div
         className={`border-2 border-dashed rounded-md p-8 text-center ${

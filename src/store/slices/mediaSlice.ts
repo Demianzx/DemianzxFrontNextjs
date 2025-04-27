@@ -35,12 +35,11 @@ export const fetchMediaFiles = createAsyncThunk(
 
 export const uploadMediaFile = createAsyncThunk(
   'media/uploadMediaFile',
-  async (file: File, { dispatch }) => {
+  async (file: File, { dispatch, rejectWithValue }) => {
     dispatch(setCurrentUpload({ fileName: file.name, isUploading: true }));
     
     try {
-      // En un entorno real, podríamos implementar una función para monitorear el progreso
-      // Simulamos actualizaciones de progreso cada 250ms
+      // Simulamos actualizaciones de progreso
       let progress = 0;
       const interval = setInterval(() => {
         progress += 10;
@@ -49,20 +48,27 @@ export const uploadMediaFile = createAsyncThunk(
         }
       }, 250);
       
+      // Intentar subir el archivo
       const response = await mediaService.uploadMediaFile(file);
       
+      // Limpiar intervalo y mostrar 100%
       clearInterval(interval);
       dispatch(updateUploadProgress(100));
       
-      // Simular un pequeño retraso para mostrar 100% antes de completar
-      setTimeout(() => {
-        dispatch(resetUploadProgress());
-      }, 500);
+      // Pequeño retraso antes de completar
+      await new Promise(resolve => setTimeout(resolve, 500));
+      dispatch(resetUploadProgress());
       
       return response;
-    } catch (error) {
+    } catch (error: any) {
+      // Asegurarnos de limpiar estado de carga en caso de error
       dispatch(resetUploadProgress());
-      throw error;
+      
+      // Devolver mensaje de error apropiado
+      if (error.message) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Failed to upload file');
     }
   }
 );

@@ -32,9 +32,11 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
   const handleFileUpload = async (file: File) => {
     try {
       await dispatch(uploadMediaFile(file)).unwrap();
-      // Refrescar la lista después de la carga
-      dispatch(fetchMediaFiles());
-      setIsUploaderOpen(false);
+      
+      setTimeout(() => {
+        dispatch(fetchMediaFiles());
+        setIsUploaderOpen(false);
+      }, 1000);
     } catch (error) {
       console.error('Failed to upload file:', error);
     }
@@ -45,7 +47,6 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
       try {
         await dispatch(deleteMediaFile(blobName)).unwrap();
         
-        // Si el archivo eliminado estaba entre los seleccionados, actualizamos la selección
         if (selectedFiles.includes(blobName)) {
           const updatedSelection = selectedFiles.filter(name => name !== blobName);
           onSelect(updatedSelection);
@@ -62,17 +63,14 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
     }
 
     if (multiple) {
-      // Para selección múltiple
       if (selectedFiles.includes(fileUrl)) {
         onSelect(selectedFiles.filter(file => file !== fileUrl));
       } else {
         onSelect([...selectedFiles, fileUrl]);
       }
     } else {
-      // Para selección única
       onSelect([fileUrl]);
       
-      // Si se proporcionó onFileSelected (por ejemplo, para un selector modal)
       if (onFileSelected) {
         onFileSelected(fileUrl);
       }
