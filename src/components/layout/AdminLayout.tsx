@@ -201,6 +201,19 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               </li>
               <li>
                 <Link 
+                  href="/admin/media" 
+                  className={`block px-4 py-2 rounded-md ${
+                    isActiveRoute('/admin/media')
+                      ? 'bg-gray-800 text-white'
+                      : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  Media
+                </Link>
+              </li>
+              <li>
+                <Link 
                   href="/admin/settings" 
                   className={`block px-4 py-2 rounded-md ${
                     isActiveRoute('/admin/settings')
