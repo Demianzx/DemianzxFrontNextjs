@@ -20,9 +20,20 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   const { currentUpload } = useAppSelector(state => state.media);
   
   const validateFile = (file: File): boolean => {
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+    // Validar tipos de archivo permitidos
+    const validTypes = [
+      'image/jpeg', 
+      'image/png', 
+      'image/gif', 
+      'image/svg+xml', 
+      'image/webp',
+      'application/pdf'
+    ];
+    
+    console.log('Validating file:', file.name, file.type, file.size);
+    
     if (!validTypes.includes(file.type)) {
-      setError(`Invalid file type. Supported types: JPG, PNG, GIF, SVG, WEBP`);
+      setError(`Invalid file type: ${file.type}. Supported types: JPG, PNG, GIF, SVG, WEBP, PDF`);
       return false;
     }
     
@@ -37,25 +48,17 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   };
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("File input change triggered");
+    
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      console.log('Selected file:', file.name, file.type, file.size);
+      
       if (validateFile(file)) {
         setSelectedFile(file);
       }
-    }
-  };
-  
-  // Manejar el drop de archivos
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0];
-      if (validateFile(file)) {
-        setSelectedFile(file);
-      }
+    } else {
+      console.log("No files selected");
     }
   };
   
@@ -64,6 +67,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
     e.preventDefault();
     e.stopPropagation();
     setDragActive(true);
+    console.log("Drag enter");
   };
   
   // Manejar salida de arrastre
@@ -71,29 +75,58 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
+    console.log("Drag leave");
   };
   
   // Prevenir comportamiento por defecto
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log("Drag over");
+  };
+  
+  // Manejar el drop de archivos
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    console.log("Drop event triggered");
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      console.log('Dropped file:', file.name, file.type, file.size);
+      
+      if (validateFile(file)) {
+        setSelectedFile(file);
+      }
+    } else {
+      console.log("No files in drop event");
+    }
   };
   
   // Manejar clic en el botón de selección de archivo
   const handleButtonClick = () => {
+    console.log("Button clicked, opening file dialog");
     fileInputRef.current?.click();
   };
   
   // Manejar subida de archivo
   const handleUpload = async () => {
+    console.log("Upload button clicked");
+    
     if (selectedFile) {
+      console.log("Uploading file:", selectedFile.name);
       setError(null);
       try {
         await onUpload(selectedFile);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Upload failed:', err);
-        setError('Failed to upload file. Please try again.');
+        setError(err.message || 'Failed to upload file. Please try again.');
       }
+    } else {
+      console.error("Trying to upload but no file is selected");
+      setError("Please select a file first");
     }
   };
 
@@ -167,24 +200,30 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
             </svg>
             <p className="text-gray-300 mb-4">Drag & drop files here, or click to select files</p>
             <button
-              onClick={handleButtonClick}
+              type="button"
+              onClick={()=> {
+                handleButtonClick();
+              }}
               className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors"
             >
               Select Files
             </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={handleFileChange}
-              accept="image/*"
-              className="hidden"
-            />
           </div>
         )}
       </div>
       
+      {/* Input file oculto pero accesible */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        id="file-upload-input"
+        onChange={handleFileChange}
+        accept="image/*,application/pdf"
+        className="hidden"
+      />
+      
       <div className="mt-4 text-sm text-gray-400">
-        <p>Supported file types: JPG, PNG, GIF, SVG</p>
+        <p>Supported file types: JPG, PNG, GIF, SVG, WEBP, PDF</p>
         <p>Maximum file size: 5MB</p>
       </div>
     </div>

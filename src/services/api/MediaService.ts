@@ -1,19 +1,40 @@
-import { MediaFilesClient, FileParameter } from './web-api-client';
+import { MediaFilesClient } from './web-api-client';
 import apiClient from './apiClient';
 import { adaptMediaFile, MediaFile } from './adapters/mediaAdapter';
 
 const mediaFilesClient = new MediaFilesClient('', apiClient);
 
 const uploadWithRetry = async (file: File, retries = 3): Promise<string> => {
-  const fileParameter: FileParameter = { 
-    data: file, 
-    fileName: file.name 
-  };
-  
   try {
-    return await mediaFilesClient.uploadMediaFile(fileParameter);
-  } catch (error) {
-    if (retries <= 0) throw error;
+    console.log(`Attempting to upload file: ${file.name} (type: ${file.type}, size: ${file.size})`);
+    
+    // Crear un FormData manualmente para asegurarnos de que se configura correctamente
+    const formData = new FormData();
+    formData.append("file", file, file.name);
+    
+    // Usar apiClient directamente con la configuración adecuada
+    const response = await apiClient.post('/api/MediaFiles', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // Eliminar Content-Type para que el navegador establezca el boundary correctamente
+        'X-Content-Type-Override': 'multipart/form-data',
+      },
+    });
+    
+    console.log("Upload successful:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Upload error:", error.message);
+    
+    if (error.response) {
+      console.error("Response status:", error.response.status);
+      console.error("Response data:", error.response.data);
+    }
+    
+    if (retries <= 0) {
+      console.error("No more retries left, throwing error");
+      throw error;
+    }
     
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -28,9 +49,7 @@ export const mediaService = {
       return await uploadWithRetry(file);
     } catch (error) {
       console.error('Error uploading file:', error);
-      // Devolver una URL simulada en caso de error durante desarrollo
-      // En producción, deberías manejar esto de manera diferente
-      return `https://example.com/mock-image/${file.name}`;
+      throw error; // Re-lanzar el error para manejarlo en el componente
     }
   },
 
@@ -44,13 +63,12 @@ export const mediaService = {
     }
   },
 
-  // Eliminar un archivo de medios
   async deleteMediaFile(blobName: string): Promise<void> {
     try {
       await mediaFilesClient.deleteMediaFile(blobName);
     } catch (error) {
       console.error('Error deleting media file:', error);
-      throw error; // Relanzar el error para manejarlo en el componente
+      throw error;
     }
   }
 };

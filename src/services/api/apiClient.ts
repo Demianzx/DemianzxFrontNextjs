@@ -15,6 +15,13 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // No sobreescribir Content-Type cuando sea multipart/form-data
+    if (config.data instanceof FormData) {
+      // Eliminar el Content-Type para que el navegador lo establezca con el boundary correcto
+      delete config.headers['Content-Type'];
+    }
+    
     return config;
   },
   (error) => {
@@ -28,11 +35,19 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // Redirigir al login si hay problemas de autenticación
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+    console.error('API request error:', error);
+    
+    if (error.response) {
+      console.error('Status:', error.response.status);
+      console.error('Data:', error.response.data);
+      
+      if (error.response.status === 401) {
+        // Redirigir al login si hay problemas de autenticación
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+      }
     }
+    
     return Promise.reject(error);
   }
 );
