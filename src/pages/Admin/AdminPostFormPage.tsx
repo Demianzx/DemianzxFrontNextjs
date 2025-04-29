@@ -6,6 +6,7 @@ import Button from '../../components/common/Button';
 import SimpleMarkdownEditor from '../../components/admin/SimpleMarkdownEditor';
 import ImageUploader from '../../components/admin/ImageUploader';
 import MultiSelect, { Option } from '../../components/admin/MultiSelect';
+import MediaSelectionModal from '../../components/media/MediaSelectionModal';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { createBlogPost, updateBlogPost, fetchBlogPostBySlug } from '../../store/slices/blogsSlice';
 import { fetchCategories, createCategory } from '../../store/slices/categoriesSlice';
@@ -55,6 +56,10 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Estados para controlar los modales de selección de imágenes
+  const [isFeaturedImageModalOpen, setIsFeaturedImageModalOpen] = useState(false);
+  const [isThumbnailImageModalOpen, setIsThumbnailImageModalOpen] = useState(false);
+  
   // Cargamos los datos necesarios al montar el componente
   useEffect(() => {
     dispatch(fetchCategories());
@@ -97,17 +102,21 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
   };
   
   const handleFeaturedImageChange = (url: string) => {
+    console.log('Featured image selected:', url); // Add logging to debug
     setFormData(prev => ({
       ...prev,
       featuredImageUrl: url
     }));
+    setIsFeaturedImageModalOpen(false); // Close modal after selection
   };
   
   const handleThumbnailImageChange = (url: string) => {
+    console.log('Thumbnail image selected:', url); // Add logging to debug
     setFormData(prev => ({
       ...prev,
       thumbnailImageUrl: url
     }));
+    setIsThumbnailImageModalOpen(false); // Close modal after selection
   };
   
   const handleCategoriesChange = (selectedCategories: Option[]) => {
@@ -274,19 +283,87 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
         
         {/* Imágenes */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ImageUploader 
-            imageUrl={formData.featuredImageUrl} 
-            onImageChange={handleFeaturedImageChange}
-            label="Featured Image"
-            height={250}
-          />
+          <div>
+            <label className="block text-lg mb-2">Featured Image</label>
+            <div className="bg-gray-800 border border-gray-700 rounded-md overflow-hidden">
+              {formData.featuredImageUrl ? (
+                <div className="relative group">
+                  <img 
+                    src={formData.featuredImageUrl} 
+                    alt="Featured" 
+                    className="w-full h-[250px] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      type="button"
+                      onClick={() => setIsFeaturedImageModalOpen(true)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md mr-2"
+                    >
+                      Change
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleFeaturedImageChange('')}
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div 
+                  className="h-[250px] flex flex-col items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+                  onClick={() => setIsFeaturedImageModalOpen(true)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-gray-400">Click to select featured image</span>
+                </div>
+              )}
+            </div>
+          </div>
           
-          <ImageUploader 
-            imageUrl={formData.thumbnailImageUrl} 
-            onImageChange={handleThumbnailImageChange}
-            label="Thumbnail Image"
-            height={250}
-          />
+          <div>
+            <label className="block text-lg mb-2">Thumbnail Image</label>
+            <div className="bg-gray-800 border border-gray-700 rounded-md overflow-hidden">
+              {formData.thumbnailImageUrl ? (
+                <div className="relative group">
+                  <img 
+                    src={formData.thumbnailImageUrl} 
+                    alt="Thumbnail" 
+                    className="w-full h-[250px] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      type="button"
+                      onClick={() => setIsThumbnailImageModalOpen(true)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md mr-2"
+                    >
+                      Change
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleThumbnailImageChange('')}
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div 
+                  className="h-[250px] flex flex-col items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+                  onClick={() => setIsThumbnailImageModalOpen(true)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-gray-400">Click to select thumbnail image</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
         
         {/* Categorías y Tags */}
@@ -355,6 +432,21 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
           </Button>
         </div>
       </form>
+      
+      {/* Modales para selección de imágenes */}
+      <MediaSelectionModal
+        isOpen={isFeaturedImageModalOpen}
+        onClose={() => setIsFeaturedImageModalOpen(false)}
+        onSelect={handleFeaturedImageChange}
+        title="Select Featured Image"
+      />
+      
+      <MediaSelectionModal
+        isOpen={isThumbnailImageModalOpen}
+        onClose={() => setIsThumbnailImageModalOpen(false)}
+        onSelect={handleThumbnailImageChange}
+        title="Select Thumbnail Image"
+      />
     </div>
   );
 };
