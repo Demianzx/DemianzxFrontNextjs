@@ -35,9 +35,9 @@ const MediaItem: React.FC<MediaItemProps> = ({
 
   return (
     <div
-      className={`relative rounded-md overflow-hidden ${
+      className={`relative rounded-md overflow-hidden transition-all duration-200 ${
         selectable ? 'cursor-pointer' : ''
-      } ${isSelected ? 'ring-2 ring-purple-500' : ''}`}
+      } ${isSelected ? 'ring-4 ring-purple-500 shadow-lg transform scale-102' : ''}`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       onClick={selectable ? onSelect : undefined}
@@ -76,13 +76,13 @@ const MediaItem: React.FC<MediaItemProps> = ({
           <div className="p-2 bg-gray-900 flex justify-between">
             {selectable && (
               <button 
-                className="text-gray-400 hover:text-white"
+                className={`${isSelected ? 'text-purple-400 hover:text-purple-300' : 'text-gray-400 hover:text-white'}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (onSelect) onSelect();
                 }}
               >
-                {isSelected ? 'Deselect' : 'Select'}
+                {isSelected ? 'Selected' : 'Select'}
               </button>
             )}
             
@@ -101,10 +101,10 @@ const MediaItem: React.FC<MediaItemProps> = ({
         </div>
       )}
       
-      {/* Indicador de selección */}
+      {/* Indicador de selección más visible */}
       {selectable && isSelected && (
-        <div className="absolute top-2 right-2 bg-purple-600 rounded-full p-1">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+        <div className="absolute top-2 right-2 bg-purple-600 rounded-full p-1 shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
           </svg>
         </div>

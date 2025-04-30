@@ -8,20 +8,24 @@ interface MediaSelectionModalProps {
   onClose: () => void;
   onSelect: (url: string) => void;
   title?: string;
+  initialUrl?: string;
 }
 
 const MediaSelectionModal: React.FC<MediaSelectionModalProps> = ({
   isOpen,
   onClose,
   onSelect,
-  title = 'Select Media'
+  title = 'Select Media',
+  initialUrl = ''
 }) => {
-  const [selectedUrl, setSelectedUrl] = useState<string>('');
+  const [selectedUrl, setSelectedUrl] = useState<string>(initialUrl);
+  const [selectedFileName, setSelectedFileName] = useState<string>('');
 
   if (!isOpen) return null;
 
-  const handleFileSelected = (fileUrl: string) => {
+  const handleFileSelected = (fileUrl: string, fileName: string) => {
     setSelectedUrl(fileUrl);
+    setSelectedFileName(fileName);
   };
 
   const handleConfirm = () => {
@@ -46,9 +50,28 @@ const MediaSelectionModal: React.FC<MediaSelectionModalProps> = ({
           </button>
         </div>
         
-        <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 130px)' }}>
+        {selectedUrl && (
+          <div className="bg-gray-800 p-4 border-b border-gray-700">
+            <div className="flex items-center">
+              <div className="w-16 h-16 overflow-hidden rounded mr-4">
+                <img 
+                  src={selectedUrl} 
+                  alt="Selected media" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <div className="text-sm text-gray-300 mb-1">Selected:</div>
+                <div className="font-medium">{selectedFileName || 'Image'}</div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 180px)' }}>
           <MediaGallery 
             selectable
+            selectedFiles={selectedFileName ? [selectedFileName] : []}
             onFileSelected={handleFileSelected}
           />
         </div>

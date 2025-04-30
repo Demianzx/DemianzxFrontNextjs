@@ -11,7 +11,7 @@ interface MediaGalleryProps {
   multiple?: boolean;
   selectedFiles?: string[];
   onSelect?: (files: string[]) => void;
-  onFileSelected?: (fileUrl: string) => void;
+  onFileSelected?: (fileUrl: string, fileName: string) => void;
 }
 
 const MediaGallery: React.FC<MediaGalleryProps> = ({
@@ -72,7 +72,7 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
       onSelect([fileName]);
       
       if (onFileSelected) {
-        onFileSelected(fileUrl); 
+        onFileSelected(fileUrl, fileName); 
       }
     }
   };
