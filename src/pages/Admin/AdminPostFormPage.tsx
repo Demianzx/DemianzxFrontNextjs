@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Button from '../../components/common/Button';
 import SimpleMarkdownEditor from '../../components/admin/SimpleMarkdownEditor';
-import ImageUploader from '../../components/admin/ImageUploader';
 import MultiSelect, { Option } from '../../components/admin/MultiSelect';
 import MediaSelectionModal from '../../components/media/MediaSelectionModal';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';

@@ -57,22 +57,22 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
     }
   };
 
-  const handleSelect = (fileUrl: string) => {
+  const handleSelect = (fileUrl: string, fileName: string) => {
     if (!selectable) {
       return;
     }
 
     if (multiple) {
-      if (selectedFiles.includes(fileUrl)) {
-        onSelect(selectedFiles.filter(file => file !== fileUrl));
+      if (selectedFiles.includes(fileName)) {
+        onSelect(selectedFiles.filter(file => file !== fileName));
       } else {
-        onSelect([...selectedFiles, fileUrl]);
+        onSelect([...selectedFiles, fileName]);
       }
     } else {
-      onSelect([fileUrl]);
+      onSelect([fileName]);
       
       if (onFileSelected) {
-        onFileSelected(fileUrl);
+        onFileSelected(fileUrl); 
       }
     }
   };

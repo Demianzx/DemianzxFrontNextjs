@@ -9,7 +9,7 @@ interface MediaGridProps {
   isLoading: boolean;
   selectable?: boolean;
   selectedFiles?: string[];
-  onSelect?: (fileUrl: string) => void;
+  onSelect?: (fileUrl: string, fileName: string) => void;
   onDelete?: (blobName: string) => void;
 }
 
@@ -47,7 +47,7 @@ const MediaGrid: React.FC<MediaGridProps> = ({
           file={file}
           isSelected={selectedFiles.includes(file.name)}
           selectable={selectable}
-          onSelect={() => onSelect(file.name)}
+          onSelect={() => onSelect(file.uri, file.name)}
           onDelete={onDelete ? () => onDelete(file.name) : undefined}
         />
       ))}

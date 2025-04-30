@@ -3,11 +3,48 @@
 import React, { useState } from 'react';
 import AdminSectionHeader from '../../components/admin/AdminSectionHeader';
 import MediaGallery from '../../components/media/MediaGallery';
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { deleteMediaFile } from '../../store/slices/mediaSlice';
+import { addNotification } from '../../store/slices/uiSlice';
 
 const AdminMediaPage: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const { isLoading, error } = useAppSelector(state => state.media);
+  const dispatch = useAppDispatch();
+
+  // Función para manejar la eliminación masiva de archivos
+  const handleBulkDelete = async () => {
+    if (selectedFiles.length === 0) return;
+
+    if (confirm(`Are you sure you want to delete ${selectedFiles.length} files?`)) {
+      try {
+        // Crear un array de promesas para eliminar todos los archivos seleccionados
+        const deletePromises = selectedFiles.map(fileName => 
+          dispatch(deleteMediaFile(fileName)).unwrap()
+        );
+        
+        // Esperar a que todas las eliminaciones se completen
+        await Promise.all(deletePromises);
+        
+        // Notificar al usuario del éxito
+        dispatch(addNotification({
+          type: 'success',
+          message: `Successfully deleted ${selectedFiles.length} files`
+        }));
+        
+        // Limpiar la selección
+        setSelectedFiles([]);
+      } catch (error) {
+        console.error('Error deleting files:', error);
+        
+        // Notificar al usuario del error
+        dispatch(addNotification({
+          type: 'error',
+          message: 'Failed to delete one or more files'
+        }));
+      }
+    }
+  };
 
   return (
     <div>
@@ -37,13 +74,7 @@ const AdminMediaPage: React.FC = () => {
           </div>
           <button 
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors"
-            onClick={() => {
-              if (confirm(`Are you sure you want to delete ${selectedFiles.length} files?`)) {
-                console.log('Delete files:', selectedFiles);
-                // Implementación real de eliminación masiva
-                setSelectedFiles([]);
-              }
-            }}
+            onClick={handleBulkDelete}
           >
             Delete Selected
           </button>
