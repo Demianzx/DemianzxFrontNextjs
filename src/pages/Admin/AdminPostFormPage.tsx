@@ -23,16 +23,16 @@ interface PostFormData {
 }
 
 interface AdminPostFormPageProps {
-  id?: string;
+  slug?: string;
 }
 
-const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => {
+const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug }) => {
   const params = useParams();
   const router = useRouter();
   const dispatch = useAppDispatch();
   
-  const id = propId || params?.id as string;
-  const isEditMode = !!id;
+  const slug = propSlug || params?.slug as string;
+  const isEditMode = !!slug;
   
   // Obtenemos los datos del estado global
   const categories = useAppSelector(state => state.categories.items);
@@ -65,9 +65,9 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ id: propId }) => 
     dispatch(fetchTags());
     
     if (isEditMode) {
-      dispatch(fetchBlogPostBySlug(id));
+      dispatch(fetchBlogPostBySlug(slug));
     }
-  }, [dispatch, id, isEditMode]);
+  }, [dispatch, slug, isEditMode]);
   
   // Actualizamos el formulario cuando se carga un post para editar
   useEffect(() => {

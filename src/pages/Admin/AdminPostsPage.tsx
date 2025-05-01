@@ -11,6 +11,7 @@ import Image from 'next/image';
 // Definimos la interface para nuestro tipo de post para la tabla
 interface PostTableItem extends Record<string, unknown> {
   id: string | number;
+  slug?: string;
   title: string;
   status: string;
   date: string;
@@ -90,6 +91,7 @@ const AdminPostsPage: React.FC = () => {
   ];
   const tableData: PostTableItem[] = posts.map(post => ({
     id: post.id,
+    slug: post.slug,
     title: post.title,
     status: post.isPublished ? 'Published' : 'Draft',
     date: post.publishedDate 
@@ -103,17 +105,17 @@ const AdminPostsPage: React.FC = () => {
     router.push('/admin/posts/create');
   };
 
-  const handleEditPost = (id: string | number) => {
-    router.push(`/admin/posts/edit/${id}`);
+  const handleEditPost = (slug: string | number) => {
+    router.push(`/admin/posts/edit/${slug}`);
   };
 
-  const handleDeletePost = (id: string | number) => {
-    console.log('Delete post:', id);
-    alert(`Post with ID ${id} would be deleted`);
+  const handleDeletePost = (slug: string | number) => {
+    console.log('Delete post:', slug);
+    alert(`Post with slig ${slug} would be deleted`);
   };
 
   const handleRowClick = (post: PostTableItem) => {
-    router.push(`/admin/posts/edit/${post.id}`);
+    router.push(`/admin/posts/edit/${post.slug}`);
   };
 
   if (isLoading) {
