@@ -5,15 +5,16 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
+import '@/styles/markdown.css';
 
-interface SimpleMarkdownEditorProps {
+interface ImprovedMarkdownEditorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   height?: number;
 }
 
-const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
+const ImprovedMarkdownEditor: React.FC<ImprovedMarkdownEditorProps> = ({
   value,
   onChange,
   placeholder = 'Write your markdown content here...',
@@ -136,112 +137,6 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     onChange(newText);
   };
   
-  // Estilos CSS personalizados para la vista previa
-  const previewStyles = `
-    .markdown-preview {
-      color: #ffffff;
-      line-height: 1.6;
-    }
-    .markdown-preview h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid #374151;
-      padding-bottom: 0.5rem;
-    }
-    .markdown-preview h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-top: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
-    .markdown-preview h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-top: 1.25rem;
-      margin-bottom: 0.75rem;
-    }
-    .markdown-preview h4, .markdown-preview h5, .markdown-preview h6 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-    }
-    .markdown-preview p {
-      margin-bottom: 1rem;
-    }
-    .markdown-preview ul, .markdown-preview ol {
-      margin-bottom: 1rem;
-      padding-left: 2rem;
-    }
-    .markdown-preview ul {
-      list-style-type: disc;
-    }
-    .markdown-preview ol {
-      list-style-type: decimal;
-    }
-    .markdown-preview li {
-      margin-bottom: 0.25rem;
-    }
-    .markdown-preview a {
-      color: #a78bfa;
-      text-decoration: underline;
-    }
-    .markdown-preview a:hover {
-      color: #c4b5fd;
-    }
-    .markdown-preview blockquote {
-      border-left: 4px solid #8b5cf6;
-      padding-left: 1rem;
-      margin-left: 0;
-      margin-right: 0;
-      font-style: italic;
-      color: #d1d5db;
-    }
-    .markdown-preview pre {
-      background-color: #1e293b;
-      padding: 1rem;
-      border-radius: 0.375rem;
-      overflow-x: auto;
-      margin-bottom: 1rem;
-    }
-    .markdown-preview code {
-      background-color: #1e293b;
-      padding: 0.2rem 0.4rem;
-      border-radius: 0.25rem;
-      font-family: monospace;
-      font-size: 0.9rem;
-      color: #f472b6;
-    }
-    .markdown-preview pre code {
-      padding: 0;
-      background-color: transparent;
-    }
-    .markdown-preview table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-    .markdown-preview table th, .markdown-preview table td {
-      border: 1px solid #4b5563;
-      padding: 0.5rem;
-    }
-    .markdown-preview table th {
-      background-color: #1e293b;
-    }
-    .markdown-preview img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 0.375rem;
-    }
-    .markdown-preview hr {
-      border: 0;
-      border-top: 1px solid #4b5563;
-      margin: 1.5rem 0;
-    }
-  `;
-  
   return (
     <div className="border border-gray-700 rounded-md overflow-hidden">
       {/* Toolbar */}
@@ -326,16 +221,17 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
       {/* Editor/Preview area */}
       {isPreview ? (
         <div 
-          className="bg-gray-800 p-4 overflow-auto markdown-preview"
+          className="bg-gray-800 p-4 overflow-auto"
           style={{ minHeight: height }}
         >
-          <style>{previewStyles}</style>
-          <ReactMarkdown 
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw, rehypeSanitize]}
-          >
-            {value || '*No content*'}
-          </ReactMarkdown>
+          <div className="markdown-content">
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw, rehypeSanitize]}
+            >
+              {value || '*No content*'}
+            </ReactMarkdown>
+          </div>
         </div>
       ) : (
         <textarea
@@ -350,4 +246,4 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
   );
 };
 
-export default SimpleMarkdownEditor;
+export default ImprovedMarkdownEditor;
