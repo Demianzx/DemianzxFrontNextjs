@@ -71,7 +71,14 @@ const AdminPostsPage: React.FC = () => {
             className="text-blue-400 hover:text-blue-300"
             onClick={(e) => {
               e.stopPropagation();
-              handleEditPost(item.id);
+              console.log('Item slug de la lista: ', item.slug);
+              if (item.slug) {
+                handleEditPost(item.slug);
+              } else {
+                // Opcional: Manejar el caso donde no hay slug (mostrar error, usar ID si es posible, etc.)
+                console.error("Error: No se encontró slug para el post con ID:", item.id);
+                alert("No se puede editar este post porque no tiene slug.");
+              }
             }}
           >
             Edit
@@ -80,7 +87,9 @@ const AdminPostsPage: React.FC = () => {
             className="text-red-400 hover:text-red-300"
             onClick={(e) => {
               e.stopPropagation();
-              handleDeletePost(item.id);
+              if (item.slug) {
+                handleEditPost(item.slug);
+              }
             }}
           >
             Delete
@@ -100,7 +109,6 @@ const AdminPostsPage: React.FC = () => {
     author: post.authorName || 'Unknown',
     thumbnailImageUrl: post.thumbnailImageUrl
   }));
-
   const handleNewPost = () => {
     router.push('/admin/posts/create');
   };

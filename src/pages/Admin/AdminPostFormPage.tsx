@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -33,7 +33,12 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
   
   const slug = propSlug || params?.slug as string;
   const isEditMode = !!slug;
-  
+  /*
+  console.log('AdminPostFormPage: Slug recibido:', slug);
+  console.log('AdminPostFormPage: Slug propSlug:', propSlug);
+  console.log('AdminPostFormPage: Slug paramsSlug:', params?.slug);
+  console.log('AdminPostFormPage: ¿Modo Edición? (isEditMode):', isEditMode);
+  */
   // Obtenemos los datos del estado global
   const categories = useAppSelector(state => state.categories.items);
   const tags = useAppSelector(state => state.tags.items);
