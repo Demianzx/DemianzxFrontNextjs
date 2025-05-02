@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
+import MediaSelectionModal from '../media/MediaSelectionModal';
 import '@/styles/markdown.css';
 
 interface ImprovedMarkdownEditorProps {
@@ -21,6 +22,7 @@ const ImprovedMarkdownEditor: React.FC<ImprovedMarkdownEditorProps> = ({
   height = 400
 }) => {
   const [isPreview, setIsPreview] = useState(false);
+  const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   
   // Función para insertar texto en el cursor actual
   const insertText = (textToInsert: string) => {
@@ -137,6 +139,13 @@ const ImprovedMarkdownEditor: React.FC<ImprovedMarkdownEditorProps> = ({
     onChange(newText);
   };
   
+  // Manejar la selección de imágenes
+  const handleImageSelect = (url: string) => {
+    const imageMarkdown = `![Image](${url})`;
+    insertText(imageMarkdown);
+    setIsMediaModalOpen(false);
+  };
+  
   return (
     <div className="border border-gray-700 rounded-md overflow-hidden">
       {/* Toolbar */}
@@ -173,6 +182,14 @@ const ImprovedMarkdownEditor: React.FC<ImprovedMarkdownEditorProps> = ({
             title="Link"
           >
             🔗
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsMediaModalOpen(true)}
+            className="px-2 py-1 text-gray-400 hover:text-white hover:bg-gray-800 rounded"
+            title="Image"
+          >
+            🖼️
           </button>
           <button
             type="button"
@@ -242,6 +259,14 @@ const ImprovedMarkdownEditor: React.FC<ImprovedMarkdownEditorProps> = ({
           style={{ minHeight: height }}
         />
       )}
+      
+      {/* Modal de selección de imágenes */}
+      <MediaSelectionModal
+        isOpen={isMediaModalOpen}
+        onClose={() => setIsMediaModalOpen(false)}
+        onSelect={handleImageSelect}
+        title="Select Image"
+      />
     </div>
   );
 };
