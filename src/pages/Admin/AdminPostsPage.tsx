@@ -88,7 +88,7 @@ const AdminPostsPage: React.FC = () => {
             onClick={(e) => {
               e.stopPropagation();
               if (item.slug) {
-                handleEditPost(item.slug);
+                handleDeletePost(item.slug);
               }
             }}
           >
