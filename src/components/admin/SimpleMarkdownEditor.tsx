@@ -7,6 +7,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import MediaSelectionModal from '../media/MediaSelectionModal';
 import '@/styles/markdown.css';
+import MarkdownRenderer from '../common/MarkdownRenderer';
 
 interface ImprovedMarkdownEditorProps {
   value: string;
@@ -242,12 +243,7 @@ const ImprovedMarkdownEditor: React.FC<ImprovedMarkdownEditorProps> = ({
           style={{ minHeight: height }}
         >
           <div className="markdown-content">
-            <ReactMarkdown 
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw, rehypeSanitize]}
-            >
-              {value || '*No content*'}
-            </ReactMarkdown>
+            <MarkdownRenderer content={value || '*No content*'} />
           </div>
         </div>
       ) : (

@@ -48,17 +48,16 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
       if (!src || typeof src !== 'string') return null;
       
       return (
-        <div className="relative my-6 w-full h-auto">
-          <div style={{ position: 'relative', width: '100%', height: '0', paddingBottom: '56.25%' }}>
-            <Image
-              src={src}
-              alt={alt || 'Image'}
-              fill
-              className="object-cover rounded-md"
-              unoptimized={src.startsWith('data:') || src.startsWith('http')}
-            />
-          </div>
-        </div>
+        <span className="block my-6">
+          <Image
+            src={src}
+            alt={alt || 'Image'}
+            width={800}
+            height={450}
+            className="rounded-md max-w-full h-auto mx-auto"
+            unoptimized={src.startsWith('data:') || src.startsWith('http')}
+          />
+        </span>
       );
     },
     a({ children, href, ...props }) {
