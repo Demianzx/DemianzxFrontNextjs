@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { UsersClient, LoginUserCommand, RegisterUserCommand } from '../../services/api/web-api-client';
 import apiClient from '../../services/api/apiClient';
 import { jwtDecode } from 'jwt-decode';
+import { authService } from '../../services/api';
 
 // Interface para los datos decodificados del token JWT
 interface JwtPayload {
@@ -59,11 +60,7 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const loginCommand = new LoginUserCommand();
-      loginCommand.userName = credentials.email;
-      loginCommand.password = credentials.password;
-      
-      const response = await usersClient.loginUser(loginCommand);
+      const response = await authService.login(credentials.email, credentials.password);
       
       // Verificar que tenemos un token válido antes de procesarlo
       if (!response.token) {
@@ -138,13 +135,7 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (userData: { userName: string; email: string; password: string }, { rejectWithValue }) => {
     try {
-      const registerUserCommand = new RegisterUserCommand();
-      registerUserCommand.userName = userData.userName;
-      registerUserCommand.email = userData.email;
-      registerUserCommand.password = userData.password;
-      
-      await usersClient.registerUser(registerUserCommand);
-      
+      await authService.register(userData.userName, userData.email, userData.password);
       return { success: true };
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -177,6 +168,47 @@ export const registerUser = createAsyncThunk(
         return rejectWithValue(error.message);
       }
       return rejectWithValue('Registration failed. Please try again.');
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  'auth/changePassword',
+  async ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }, { rejectWithValue }) => {
+    try {
+      await authService.changePassword(currentPassword, newPassword);
+      return { success: true };
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+        
+        if (errorData.errors) {
+          let errorMessage = "";
+          
+          if (typeof errorData.errors === 'object') {
+            Object.entries(errorData.errors).forEach(([key, value]: [string, any]) => {
+              if (Array.isArray(value)) {
+                errorMessage += `${value.join(', ')} `;
+              } else {
+                errorMessage += `${value} `;
+              }
+            });
+          } else if (Array.isArray(errorData.errors)) {
+            errorMessage = errorData.errors.join(', ');
+          }
+          
+          return rejectWithValue(errorMessage.trim() || 'Password change failed');
+        }
+        
+        if (errorData.title) {
+          return rejectWithValue(errorData.title);
+        }
+      }
+      
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Password change failed. Please try again.');
     }
   }
 );
@@ -269,10 +301,24 @@ const authSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string || 'Registration failed';
+      })
+      // Manejar cambio de contraseña
+      .addCase(changePassword.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.isLoading = false;
+        // No necesitamos actualizar el usuario o el token, solo indicar éxito
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string || 'Password change failed';
       });
   }
 });
 
 export const { logout, clearAuthError, initializeAuth } = authSlice.actions;
+
 
 export default authSlice.reducer;
