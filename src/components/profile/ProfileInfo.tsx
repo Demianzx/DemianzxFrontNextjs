@@ -82,7 +82,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? 'Saving...' : 'Save Changes'}
+              {isLoading ? 'Guardando...' : 'Guardar cambios'}
             </Button>
             
             <Button

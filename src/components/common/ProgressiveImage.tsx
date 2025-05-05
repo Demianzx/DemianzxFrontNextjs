@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getValidImageUrl } from '../../utils/imageUtils';
 
 interface ProgressiveImageProps {
   src: string;
@@ -19,12 +20,23 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   height = 0 
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [blurUrl, setBlurUrl] = useState("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E");
+  const [imageSrc, setImageSrc] = useState('');
+  const [blurUrl] = useState("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E");
 
   useEffect(() => {
+    // Validar y corregir la URL de la imagen
+    setImageSrc(getValidImageUrl(src));
     setIsLoaded(false);
   }, [src]);
+
+  // Si aún no tenemos una URL válida, mostrar el placeholder mientras se procesa
+  if (!imageSrc) {
+    return (
+      <div className="relative overflow-hidden w-full h-full">
+        <div className="absolute inset-0 bg-gray-900 animate-pulse" />
+      </div>
+    );
+  }
 
   return (
     <div className="relative overflow-hidden w-full h-full">
@@ -32,9 +44,9 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         <div className="absolute inset-0 bg-gray-900 animate-pulse" />
       )}
       <Image
-        src={src}
+        src={imageSrc}
         alt={alt}
-        width={width || 1200}  // Debemos proporcionar un ancho y alto para Next Image
+        width={width || 1200}
         height={height || 800}
         placeholder="blur"
         blurDataURL={blurUrl}
@@ -42,9 +54,9 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
           isLoaded ? 'opacity-100' : 'opacity-0'
         } ${className}`}
         onLoad={() => setIsLoaded(true)}
-        // Estas opciones hacen que Image se comporte más como img nativo
         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        fill={!width || !height} // Si no se proporcionan dimensiones, usar fill
+        fill={!width || !height}
+        unoptimized={true} // Usar unoptimized para todas las imágenes externas
       />
     </div>
   );

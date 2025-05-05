@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['picsum.photos'],
+    domains: ['demianzxgamesstorage.blob.core.windows.net','picsum.photos'],
   },  
 };
 

@@ -47,7 +47,7 @@ const ArticlesPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-12">
-        <h1 className="text-4xl font-bold mb-8">Articles</h1>
+        <h1 className="text-4xl font-bold mb-8">Articulos</h1>
         
         {isLoadingCategories ? (
           <div className="h-10 bg-gray-800 animate-pulse rounded-md w-96"></div>
