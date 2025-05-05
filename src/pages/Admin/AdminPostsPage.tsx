@@ -81,7 +81,7 @@ const AdminPostsPage: React.FC = () => {
               }
             }}
           >
-            Edit
+            Editar
           </button>
           <button 
             className="text-red-400 hover:text-red-300"
@@ -92,7 +92,7 @@ const AdminPostsPage: React.FC = () => {
               }
             }}
           >
-            Delete
+            Borrar
           </button>
         </div>
       )
@@ -137,7 +137,7 @@ const AdminPostsPage: React.FC = () => {
   if (error) {
     return (
       <div className="bg-red-900 text-white p-4 rounded-md">
-        Error loading posts: {error}
+        Error al cargar articulos: {error}
       </div>
     );
   }

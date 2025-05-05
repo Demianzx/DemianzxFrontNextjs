@@ -33,7 +33,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
   if (editMode) {
     return (
       <div>
-        <h2 className="text-2xl font-bold mb-6">Edit Personal Information</h2>
+        <h2 className="text-2xl font-bold mb-6">Editar Información Personal</h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -52,7 +52,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
           
           <div>
             <label htmlFor="displayName" className="block text-gray-400 mb-2">
-              Display Name
+              Nombra a mostrar
             </label>
             <input
               type="text"
@@ -90,7 +90,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
               onClick={() => setEditMode(false)}
               disabled={isLoading}
             >
-              Cancel
+              Cancelar
             </Button>
           </div>
         </form>

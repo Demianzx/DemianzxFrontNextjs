@@ -35,7 +35,7 @@ const ProfilePage: React.FC = () => {
   
   return (
     <div className="container mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-8">Your Profile</h1>
+      <h1 className="text-3xl font-bold mb-8">Perfil</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Sidebar con pestañas */}
@@ -65,7 +65,7 @@ const ProfilePage: React.FC = () => {
                     }`}
                     onClick={() => setActiveTab('info')}
                   >
-                    Personal Information
+                    Información Personal
                   </button>
                 </li>
                 <li>
@@ -77,7 +77,7 @@ const ProfilePage: React.FC = () => {
                     }`}
                     onClick={() => setActiveTab('security')}
                   >
-                    Security
+                    Seguridad
                   </button>
                 </li>
                 <li>
@@ -89,7 +89,7 @@ const ProfilePage: React.FC = () => {
                     }`}
                     onClick={() => setActiveTab('activity')}
                   >
-                    Activity
+                    ACtividad
                   </button>
                 </li>
               </ul>

@@ -43,7 +43,7 @@ const AdminDashboardPage: React.FC = () => {
       {/* Recent Posts and Comments */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div>
-          <h2 className="text-2xl font-bold mb-6">Recent Posts</h2>
+          <h2 className="text-2xl font-bold mb-6">Publicaciones recientes</h2>
           <div className="space-y-4">
             {recentPosts.map(post => (
               <RecentItem 
@@ -56,7 +56,7 @@ const AdminDashboardPage: React.FC = () => {
         </div>
         
         <div>
-          <h2 className="text-2xl font-bold mb-6">Recent Comments</h2>
+          <h2 className="text-2xl font-bold mb-6">Comentarios recientes</h2>
           <div className="space-y-4">
             {recentComments.map(comment => (
               <RecentItem 

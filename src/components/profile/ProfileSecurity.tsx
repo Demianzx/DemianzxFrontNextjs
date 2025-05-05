@@ -72,10 +72,10 @@ const ProfileSecurity: React.FC = () => {
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Security Settings</h2>
+      <h2 className="text-2xl font-bold mb-6">Configuración de Seguridad</h2>
       
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Change Password</h3>
+        <h3 className="text-xl font-semibold mb-4">Cambiar Contraseña</h3>
         
         {errorMessage && (
           <div className="bg-red-900 text-red-200 p-3 rounded-md mb-4">
@@ -92,7 +92,7 @@ const ProfileSecurity: React.FC = () => {
         <form onSubmit={handlePasswordChange} className="space-y-4">
           <div>
             <label htmlFor="currentPassword" className="block text-gray-400 mb-2">
-              Current Password
+              Contraseña actual
             </label>
             <input
               type="password"
@@ -107,7 +107,7 @@ const ProfileSecurity: React.FC = () => {
           
           <div>
             <label htmlFor="newPassword" className="block text-gray-400 mb-2">
-              New Password
+              Nueva Contraseña
             </label>
             <input
               type="password"
@@ -122,7 +122,7 @@ const ProfileSecurity: React.FC = () => {
           
           <div>
             <label htmlFor="confirmPassword" className="block text-gray-400 mb-2">
-              Confirm New Password
+              Confirmar Nueva Contraseña
             </label>
             <input
               type="password"
@@ -138,19 +138,19 @@ const ProfileSecurity: React.FC = () => {
           <div className="mt-2 text-sm">
             <div className={`flex items-center ${newPassword.length >= 8 ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{newPassword.length >= 8 ? '✓' : '○'}</span>
-              <span>At least 8 characters</span>
+              <span>Al menos 8 caracteres</span>
             </div>
             <div className={`flex items-center ${/[A-Z]/.test(newPassword) ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{/[A-Z]/.test(newPassword) ? '✓' : '○'}</span>
-              <span>At least one uppercase letter</span>
+              <span>Al menos una mayuscula</span>
             </div>
             <div className={`flex items-center ${/[0-9]/.test(newPassword) ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{/[0-9]/.test(newPassword) ? '✓' : '○'}</span>
-              <span>At least one number</span>
+              <span>Al menos un Numero</span>
             </div>
             <div className={`flex items-center ${/[^A-Za-z0-9]/.test(newPassword) ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{/[^A-Za-z0-9]/.test(newPassword) ? '✓' : '○'}</span>
-              <span>At least one special character</span>
+              <span>Al menos un caracter especial</span>
             </div>
           </div>
           

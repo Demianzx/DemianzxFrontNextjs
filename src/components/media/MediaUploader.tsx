@@ -26,14 +26,11 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
       'image/png', 
       'image/gif', 
       'image/svg+xml', 
-      'image/webp',
-      'application/pdf'
-    ];
-    
-    console.log('Validating file:', file.name, file.type, file.size);
+      'image/webp'
+    ];   
     
     if (!validTypes.includes(file.type)) {
-      setError(`Invalid file type: ${file.type}. Supported types: JPG, PNG, GIF, SVG, WEBP, PDF`);
+      setError(`Invalid file type: ${file.type}. Supported types: JPG, PNG, GIF, SVG, WEBP`);
       return false;
     }
     
@@ -48,7 +45,6 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   };
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("File input change triggered");
     
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -67,7 +63,6 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
     e.preventDefault();
     e.stopPropagation();
     setDragActive(true);
-    console.log("Drag enter");
   };
   
   // Manejar salida de arrastre
@@ -75,14 +70,12 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    console.log("Drag leave");
   };
   
   // Prevenir comportamiento por defecto
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("Drag over");
   };
   
   // Manejar el drop de archivos
@@ -91,11 +84,9 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
     e.stopPropagation();
     setDragActive(false);
     
-    console.log("Drop event triggered");
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0];
-      console.log('Dropped file:', file.name, file.type, file.size);
       
       if (validateFile(file)) {
         setSelectedFile(file);
@@ -107,33 +98,28 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   
   // Manejar clic en el botón de selección de archivo
   const handleButtonClick = () => {
-    console.log("Button clicked, opening file dialog");
     fileInputRef.current?.click();
   };
   
   // Manejar subida de archivo
   const handleUpload = async () => {
-    console.log("Upload button clicked");
     
     if (selectedFile) {
-      console.log("Uploading file:", selectedFile.name);
       setError(null);
       try {
         await onUpload(selectedFile);
       } catch (err: any) {
-        console.error('Upload failed:', err);
-        setError(err.message || 'Failed to upload file. Please try again.');
+        setError(err.message || 'Error al subir la imagen, intenta de nuevo mas tarde.');
       }
     } else {
-      console.error("Trying to upload but no file is selected");
-      setError("Please select a file first");
+      setError("Primero selecciona un archivo");
     }
   };
 
   return (
     <div className="bg-gray-800 rounded-md p-6 mb-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-bold">Upload Media</h3>
+        <h3 className="text-xl font-bold">Subir Imagen</h3>
         <button 
           onClick={onClose}
           className="text-gray-400 hover:text-white"
@@ -161,14 +147,14 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
       >
         {currentUpload.isUploading ? (
           <div className="space-y-4">
-            <p className="text-gray-300">Uploading {currentUpload.fileName}...</p>
+            <p className="text-gray-300">Subiendo {currentUpload.fileName}...</p>
             <div className="w-full bg-gray-700 rounded-full h-2.5">
               <div 
                 className="bg-purple-600 h-2.5 rounded-full" 
                 style={{ width: `${currentUpload.progress}%` }}
               ></div>
             </div>
-            <p className="text-sm text-gray-400">{currentUpload.progress}% Complete</p>
+            <p className="text-sm text-gray-400">{currentUpload.progress}% Completado</p>
           </div>
         ) : selectedFile ? (
           <div className="space-y-4">
@@ -183,13 +169,13 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
                 onClick={handleUpload}
                 className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
               >
-                Upload
+                Subir
               </button>
               <button
                 onClick={() => setSelectedFile(null)}
                 className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors"
               >
-                Cancel
+                Cancelar
               </button>
             </div>
           </div>
@@ -198,7 +184,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
-            <p className="text-gray-300 mb-4">Drag & drop files here, or click to select files</p>
+            <p className="text-gray-300 mb-4">Arrastra y suelta archivos aquí, o clickea para seleccionar archivo</p>
             <button
               type="button"
               onClick={()=> {
@@ -206,7 +192,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
               }}
               className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors"
             >
-              Select Files
+              Seleccionar Archivos
             </button>
           </div>
         )}
@@ -223,8 +209,8 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
       />
       
       <div className="mt-4 text-sm text-gray-400">
-        <p>Supported file types: JPG, PNG, GIF, SVG, WEBP, PDF</p>
-        <p>Maximum file size: 5MB</p>
+        <p>Tipos de archivos soportados: JPG, PNG, GIF, SVG, WEBP</p>
+        <p>Tamaño maxímo: 5MB</p>
       </div>
     </div>
   );

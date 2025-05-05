@@ -76,7 +76,7 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => 
   if (error || !article) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
-        <h1 className="text-3xl font-bold mb-4">Article not found</h1>
+        <h1 className="text-3xl font-bold mb-4">Articulo no encontrado.</h1>
         <p className="text-gray-400">{error || "We couldn't find the article you're looking for."}</p>
       </div>
     );
@@ -111,7 +111,7 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => 
             </div>
             
             <ArticleMetaBar 
-              authorName={article.authorName || 'Unknown Author'}
+              authorName={article.authorName || 'Autor Desconocido'}
               authorAvatar={'https://picsum.photos/100/100?random=10'} // Debería venir del usuario
             />
             
@@ -135,7 +135,7 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => 
           {/* Sidebar - 1/4 width on large screens */}
           <div className="lg:col-span-1">
             <div className="sticky top-4">
-              <h2 className="text-xl font-bold mb-6 text-white">Related Articles</h2>
+              <h2 className="text-xl font-bold mb-6 text-white">Articulos Relacionados</h2>
               {relatedArticles.length > 0 ? (
                 <div className="space-y-6">
                   {relatedArticles.map(article => (
@@ -154,7 +154,7 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => 
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-400">No related articles found.</p>
+                <p className="text-gray-400">Sin articulos relacionados.</p>
               )}
             </div>
           </div>

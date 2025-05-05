@@ -79,8 +79,8 @@ const Header: React.FC = () => {
       <div className="hidden md:flex items-center space-x-6">
         <nav className={`${searchExpanded ? 'hidden md:block' : 'block'}`}>
           <ul className="flex space-x-8">
-          <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400' : ''}`}>Home</Link></li>
-          <li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Articles</Link></li>
+          <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400' : ''}`}>Inicio</Link></li>
+          <li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Artículos</Link></li>
             {isAdmin && (
               <li><Link href="/admin" className="hover:text-purple-400 transition-colors">Admin</Link></li>
             )}
@@ -157,7 +157,7 @@ const Header: React.FC = () => {
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                 >
-                  Logout
+                  Cerrar Sesión
                 </button>
               </div>
             )}
@@ -167,7 +167,7 @@ const Header: React.FC = () => {
             className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
             onClick={() => setIsAuthModalOpen(true)}
           >
-            Login
+            Iniciar Sesión
           </button>
         )}
       </div>
@@ -211,7 +211,7 @@ const Header: React.FC = () => {
                   className={`block hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Home
+                  Inicio
                 </Link>
               </li>
               <li>
@@ -220,7 +220,7 @@ const Header: React.FC = () => {
                   className={`block hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Articles
+                  Artículos
                 </Link>
               </li>
               <li>
@@ -264,13 +264,13 @@ const Header: React.FC = () => {
                       className="text-sm text-gray-400 hover:text-white"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      Profile
+                      Perfil
                     </Link>
                     <button 
                       className="text-sm text-gray-400 hover:text-white"
                       onClick={handleLogout}
                     >
-                      Logout
+                      Cerrar Sesión
                     </button>
                   </div>
                 </div>

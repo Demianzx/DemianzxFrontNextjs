@@ -58,7 +58,7 @@ const AdminCategoriesPage: React.FC = () => {
               handleEditCategory(item.id);
             }}
           >
-            Edit
+            Editar
           </button>
           <button 
             className="text-red-400 hover:text-red-300"
@@ -67,7 +67,7 @@ const AdminCategoriesPage: React.FC = () => {
               handleDeleteCategory(item.id);
             }}
           >
-            Delete
+            Borrar
           </button>
         </div>
       )
@@ -101,7 +101,7 @@ const AdminCategoriesPage: React.FC = () => {
   if (error) {
     return (
       <div className="bg-red-900 text-white p-4 rounded-md">
-        Error loading categories: {error}
+        Error al cargar categorias: {error}
       </div>
     );
   }

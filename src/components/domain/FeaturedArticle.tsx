@@ -39,7 +39,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
           {date} {excerpt}
         </p>
         <Link href={articleUrl}>
-          <Button variant="primary" size="lg">Read More</Button>
+          <Button variant="primary" size="lg">Leer más</Button>
         </Link>
       </div>
     </div>

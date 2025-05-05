@@ -107,7 +107,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 onClick={handleLogout}
                 className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
               >
-                Log out
+                Cerrar Sesión
               </button>
             </div>
           </div>
@@ -134,7 +134,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           `}
         >
           <div className="flex justify-between items-center md:hidden mb-5">
-            <h2 className="text-xl font-bold">Admin Menu</h2>
+            <h2 className="text-xl font-bold">Admin Menú</h2>
             <button 
               className="text-gray-400 hover:text-white"
               onClick={() => setSidebarOpen(false)}
@@ -170,7 +170,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
-                  Posts
+                  Publicaciones
                 </Link>
               </li>
               <li>
@@ -183,7 +183,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
-                  Categories
+                  Categorias
                 </Link>
               </li>
               <li>
@@ -196,7 +196,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
-                  Users
+                  Usuarios
                 </Link>
               </li>
               <li>
@@ -222,7 +222,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
-                  Settings
+                  Configuración
                 </Link>
               </li>
             </ul>
@@ -234,7 +234,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               onClick={handleLogout}
               className="block px-4 py-2 text-gray-400 hover:bg-gray-800 hover:text-white rounded-md w-full text-left"
             >
-              Log out
+              Cerrar Sesión
             </button>
           </div>
         </aside>

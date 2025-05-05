@@ -81,7 +81,7 @@ const MediaSelectionModal: React.FC<MediaSelectionModalProps> = ({
             onClick={onClose}
             className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             onClick={handleConfirm}
@@ -90,7 +90,7 @@ const MediaSelectionModal: React.FC<MediaSelectionModalProps> = ({
               selectedUrl ? 'hover:bg-purple-700' : 'opacity-50 cursor-not-allowed'
             }`}
           >
-            Select Image
+            Seleccionar Imagen
           </button>
         </div>
       </div>

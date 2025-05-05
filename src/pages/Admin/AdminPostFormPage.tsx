@@ -33,12 +33,7 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
   
   const slug = propSlug || params?.slug as string;
   const isEditMode = !!slug;
-  /*
-  console.log('AdminPostFormPage: Slug recibido:', slug);
-  console.log('AdminPostFormPage: Slug propSlug:', propSlug);
-  console.log('AdminPostFormPage: Slug paramsSlug:', params?.slug);
-  console.log('AdminPostFormPage: ¿Modo Edición? (isEditMode):', isEditMode);
-  */
+
   // Obtenemos los datos del estado global
   const categories = useAppSelector(state => state.categories.items);
   const tags = useAppSelector(state => state.tags.items);
@@ -106,7 +101,6 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
   };
   
   const handleFeaturedImageChange = (url: string) => {
-    console.log('Featured image selected:', url); // Add logging to debug
     setFormData(prev => ({
       ...prev,
       featuredImageUrl: url
@@ -115,7 +109,6 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
   };
   
   const handleThumbnailImageChange = (url: string) => {
-    console.log('Thumbnail image selected:', url); // Add logging to debug
     setFormData(prev => ({
       ...prev,
       thumbnailImageUrl: url

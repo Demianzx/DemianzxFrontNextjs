@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
           />
         ) : (
           <div className="w-full h-[500px] bg-gray-800 flex items-center justify-center rounded-lg">
-            <p className="text-gray-400">No featured articles available</p>
+            <p className="text-gray-400">Sin articulo destacado.</p>
           </div>
         )}
       </section>
@@ -57,7 +57,7 @@ const HomePage: React.FC = () => {
         {/* Latest Articles */}
         <div className="lg:col-span-2">
           <section>
-            <h2 className="text-2xl font-bold mb-6">Latest Articles</h2>
+            <h2 className="text-2xl font-bold mb-6">Articulos Recientes</h2>
             {isLoadingLatest ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2].map(i => (
@@ -79,7 +79,7 @@ const HomePage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-400">No articles available</p>
+              <p className="text-gray-400">Sin articulos disponibles.</p>
             )}
           </section>
         </div>
@@ -87,7 +87,7 @@ const HomePage: React.FC = () => {
         {/* Popular Articles (reemplazando Popular Reviews) */}
         <div>
           <section>
-            <h2 className="text-2xl font-bold mb-6">Popular Articles</h2>
+            <h2 className="text-2xl font-bold mb-6">Articulos Populares</h2>
             {isLoadingPopular ? (
               <div className="space-y-4">
                 {[1, 2, 3, 4].map(i => (
@@ -119,7 +119,7 @@ const HomePage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-400">No popular articles available</p>
+              <p className="text-gray-400">Sin articulos disponibles.</p>
             )}
           </section>
         </div>
@@ -134,7 +134,7 @@ const HomePage: React.FC = () => {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-white">Coming Soon: More Gaming Content</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white">Proximamente: Más contenido gaming</h2>
           </div>
         </div>
       </section>

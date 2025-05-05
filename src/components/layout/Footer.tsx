@@ -11,20 +11,20 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4 text-white">DEMIANZX GAMES</h3>
             <p className="text-sm">
-              Your source for the latest gaming news, reviews, and articles.
+              Tu fuente de noticias, reviews y articulos sobre el gaming.
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 text-white">Links rapidos</h3>
             <ul className="space-y-2">
-              <li><Link href="/" className="text-sm hover:text-purple-400 transition-colors">Home</Link></li>
-              <li><Link href="/articles" className="text-sm hover:text-purple-400 transition-colors">Articles</Link></li>
+              <li><Link href="/" className="text-sm hover:text-purple-400 transition-colors">Inicio</Link></li>
+              <li><Link href="/articles" className="text-sm hover:text-purple-400 transition-colors">Artículos</Link></li>
               <li><Link href="/reviews" className="text-sm hover:text-purple-400 transition-colors">Reviews</Link></li>
-              <li><Link href="/about" className="text-sm hover:text-purple-400 transition-colors">About</Link></li>
+              <li><Link href="/about" className="text-sm hover:text-purple-400 transition-colors">Acerca de</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white">Connect</h3>
+            <h3 className="text-lg font-bold mb-4 text-white">Contacto</h3>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-300 hover:text-purple-400 transition-colors">
                 <span className="sr-only">Twitter</span>
@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="mt-8 border-t border-gray-800 pt-6 text-sm text-center">
-          &copy; {new Date().getFullYear()} Game Blog. All rights reserved.
+          &copy; {new Date().getFullYear()} DemianzxGames, todos los derechos reservados.
         </div>
       </div>
     </footer>

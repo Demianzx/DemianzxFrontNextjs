@@ -108,7 +108,7 @@ const ProfileActivity: React.FC = () => {
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Recent Activity</h2>
+      <h2 className="text-2xl font-bold mb-6">Actividad Reciente</h2>
       
       {activityItems.length > 0 ? (
         <div className="space-y-4">
@@ -124,12 +124,12 @@ const ProfileActivity: React.FC = () => {
           ))}
         </div>
       ) : (
-        <p className="text-gray-400">No recent activity found.</p>
+        <p className="text-gray-400">Sin actividad reciente.</p>
       )}
       
       <div className="mt-6 text-center">
         <button className="text-purple-400 hover:text-purple-300">
-          Load More
+          Cargar más
         </button>
       </div>
     </div>

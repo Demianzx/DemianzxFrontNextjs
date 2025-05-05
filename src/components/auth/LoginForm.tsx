@@ -43,7 +43,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-400 mb-2">
-            User
+            Usuario
           </label>
           <input
             id="email"
@@ -58,7 +58,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
         
         <div className="mb-6">
           <label htmlFor="password" className="block text-gray-400 mb-2">
-            Password
+            Contraseña
           </label>
           <input
             id="password"
@@ -81,7 +81,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
       </form>
       
       <div className="mt-6 text-center text-gray-400">
-        <p>Or log in with</p>
+        <p>O inicia sesión con</p>
         <div className="flex justify-center space-x-4 mt-4">
           <button className="bg-gray-800 hover:bg-gray-700 w-12 h-12 rounded-md flex items-center justify-center transition-colors">
             <svg className="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 24 24">

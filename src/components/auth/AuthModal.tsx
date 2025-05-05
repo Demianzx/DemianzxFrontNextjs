@@ -70,7 +70,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             }`}
             onClick={() => setActiveTab('login')}
           >
-            Login
+            Iniciar Sesión
           </button>
           <button
             className={`flex-1 py-4 font-medium text-center ${
@@ -80,7 +80,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             }`}
             onClick={() => setActiveTab('register')}
           >
-            Register
+            Registrar
           </button>
         </div>
         

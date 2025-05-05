@@ -94,7 +94,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
                   onDelete();
                 }}
               >
-                Delete
+                Borrar
               </button>
             )}
           </div>

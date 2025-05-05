@@ -80,7 +80,7 @@ const ArticlesPage: React.FC = () => {
           ))}
         </div>
       ) : (
-        <p className="text-gray-400 text-center py-10">No articles found in this category.</p>
+        <p className="text-gray-400 text-center py-10">No se han encontrado articulos en esta categoria.</p>
       )}
     </div>
   );

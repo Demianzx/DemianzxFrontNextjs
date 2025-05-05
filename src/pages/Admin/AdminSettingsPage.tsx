@@ -33,11 +33,11 @@ const AdminSettingsPage: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-8">Settings</h1>
+      <h1 className="text-2xl font-bold mb-8">Configuración</h1>
       
       <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
         <div className="bg-gray-800 p-6 rounded-lg space-y-6">
-          <h2 className="text-xl font-semibold mb-4">General Settings</h2>
+          <h2 className="text-xl font-semibold mb-4">Configuración General</h2>
           
           <div>
             <label htmlFor="siteName" className="block text-gray-400 mb-2">

@@ -18,7 +18,7 @@ const ArticleMetaBar: React.FC<ArticleMetaBarProps> = ({
           className="w-10 h-10 rounded-full"
         />
         <div>
-          <p className="text-sm text-gray-400">Written by</p>
+          <p className="text-sm text-gray-400">Escrito por </p>
           <p className="font-medium">{authorName}</p>
         </div>
       </div>

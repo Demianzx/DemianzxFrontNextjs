@@ -117,7 +117,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
         {/* Campo de nombre de usuario */}
         <div className="mb-4">
           <label htmlFor="register-username" className="block text-gray-400 mb-2">
-            Username
+            Nombre de usuario
           </label>
           <input
             id="register-username"
@@ -133,7 +133,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
         {/* Campo de email */}
         <div className="mb-4">
           <label htmlFor="register-email" className="block text-gray-400 mb-2">
-            Email address
+            Dirección Email
           </label>
           <input
             id="register-email"
@@ -149,7 +149,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
         {/* Campo de contraseña con botón de mostrar/ocultar */}
         <div className="mb-4">
           <label htmlFor="register-password" className="block text-gray-400 mb-2">
-            Password
+            Contraseña
           </label>
           <div className="relative">
             <input
@@ -186,19 +186,19 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
           <div className="mt-2 text-sm">
             <div className={`flex items-center ${passwordValidation.length ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{passwordValidation.length ? '✓' : '○'}</span>
-              <span>At least 8 characters</span>
+              <span>Al menos 8 caracteres</span>
             </div>
             <div className={`flex items-center ${passwordValidation.hasUpperCase ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{passwordValidation.hasUpperCase ? '✓' : '○'}</span>
-              <span>At least one uppercase letter</span>
+              <span>Al menos una mayuscula</span>
             </div>
             <div className={`flex items-center ${passwordValidation.hasNumber ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{passwordValidation.hasNumber ? '✓' : '○'}</span>
-              <span>At least one number</span>
+              <span>Al menos 1 numero</span>
             </div>
             <div className={`flex items-center ${passwordValidation.hasSpecial ? 'text-green-400' : 'text-gray-500'}`}>
               <span className="mr-2">{passwordValidation.hasSpecial ? '✓' : '○'}</span>
-              <span>At least one special character</span>
+              <span>Al menos un caracter especial</span>
             </div>
           </div>
         </div>
@@ -213,7 +213,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
       </form>
       
       <div className="mt-6 text-center text-gray-400">
-        <p>Or sign up with</p>
+        <p>O registrate con</p>
         <div className="flex justify-center space-x-4 mt-4">
           <button className="bg-gray-800 hover:bg-gray-700 w-12 h-12 rounded-md flex items-center justify-center transition-colors">
             <svg className="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
