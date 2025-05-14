@@ -1,5 +1,5 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAppSelector } from '../../store/hooks';
 
 interface ProtectedRouteProps {
@@ -9,18 +9,27 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin = false }) => {
   const { isAuthenticated, user } = useAppSelector(state => state.auth);
-  const location = useLocation();
+  const router = useRouter();
   
-  // Verificar si el usuario está autenticado
-  if (!isAuthenticated) {
-    // Redirigir al inicio guardando la ubicación actual
-    return <Navigate to="/" state={{ from: location }} replace />;
-  }
+  useEffect(() => {
+    // Verificar si el usuario está autenticado
+    if (!isAuthenticated) {
+      // Redirigir al inicio
+      router.push('/');
+      return;
+    }
+    
+    // Verificar si se requiere rol de admin
+    if (requireAdmin && user?.role !== 'Admin') {
+      // Redirigir al inicio si no es admin
+      router.push('/');
+      return;
+    }
+  }, [isAuthenticated, user, requireAdmin, router]);
   
-  // Verificar si se requiere rol de admin
-  if (requireAdmin && user?.role !== 'Admin') {
-    // Redirigir al inicio si no es admin
-    return <Navigate to="/" replace />;
+  // Si no está autenticado o no tiene permisos, no renderizar los hijos
+  if (!isAuthenticated || (requireAdmin && user?.role !== 'Admin')) {
+    return null;
   }
   
   // Si está autenticado y tiene los permisos adecuados, mostrar los componentes hijos

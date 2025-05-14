@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface ReviewCardProps {
   id: string;
@@ -15,7 +15,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   imageUrl
 }) => {
   return (
-    <Link to={`/reviews/${id}`} className="flex items-center space-x-4 p-2 hover:bg-gray-800 rounded-lg transition-colors">
+    <Link href={`/reviews/${id}`} className="flex items-center space-x-4 p-2 hover:bg-gray-800 rounded-lg transition-colors">
       <div className="w-16 h-16 flex-shrink-0 rounded overflow-hidden">
         <img
           src={imageUrl}
