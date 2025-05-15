@@ -1,4 +1,4 @@
-import ArticleDetailPage from '@/pages/Articles/ArticleDetailPage';
+import ArticleDetailPage from '@/blogPages/Articles/ArticleDetailPage';
 import { Suspense } from 'react';
 import { use } from 'react';
 

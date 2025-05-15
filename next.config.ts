@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['demianzxgamesstorage.blob.core.windows.net','picsum.photos'],
   },  
+  output: 'standalone',
 };
 
 export default nextConfig;

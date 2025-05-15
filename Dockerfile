@@ -9,19 +9,16 @@ FROM node:lts AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
-
 
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV ESLINT_NO_DEV_ERRORS=true
-ENV TYPESCRIPT_STRICT=false
 ENV NODE_ENV=production
 
-
-RUN npm run build || (echo "Build failed with linting, retrying without lint" && npx next build --no-lint)
+# Construir la aplicación con output standalone
+RUN npm run build
 
 # Production stage - Run the application
-FROM node:lts AS runner
+FROM node:lts-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -31,13 +28,10 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy only necessary files from the builder stage
+# Copiar el directorio standalone y otros archivos necesarios
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.next/standalone ./
-
-# Copy next.config.js
-COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/.next/static ./.next/static
 
 # Set the correct permission for the application
 RUN chown -R nextjs:nodejs /app

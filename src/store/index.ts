@@ -19,6 +19,8 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false, // Permite objetos no serializables como fechas
     }),
+  // Añadir esta opción para evitar errores en modo de desarrollo con SSR
+  devTools: typeof window !== 'undefined',
 });
 
 export type RootState = ReturnType<typeof store.getState>;

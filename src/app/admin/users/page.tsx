@@ -1,4 +1,4 @@
-import AdminUsersPage from '@/pages/Admin/AdminUsersPage';
+import AdminUsersPage from '@/blogPages/Admin/AdminUsersPage';
 
 export default function AdminUsers() {
   return <AdminUsersPage />;

@@ -1,4 +1,4 @@
-import AdminSettingsPage from '@/pages/Admin/AdminSettingsPage';
+import AdminSettingsPage from '@/blogPages/Admin/AdminSettingsPage';
 
 export default function AdminSettings() {
   return <AdminSettingsPage />;
