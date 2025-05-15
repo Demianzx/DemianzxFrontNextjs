@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start"
-  },
+    "start": "node server.js"
+  },  
   "dependencies": {
     "@lexical/react": "^0.30.0",
     "@mdxeditor/editor": "^3.30.1",
