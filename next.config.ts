@@ -4,8 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['demianzxgamesstorage.blob.core.windows.net','picsum.photos'],
-  },  
-  output: 'standalone',
+  },
 };
 
 export default nextConfig;
