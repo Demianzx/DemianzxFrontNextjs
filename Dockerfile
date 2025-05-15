@@ -39,9 +39,5 @@ RUN chown -R nextjs:nodejs /app
 # Switch to the non-root user
 USER nextjs
 
-EXPOSE 3000
-
-ENV PORT 3000
-
 # Start the application
 CMD ["node", "server.js"]
