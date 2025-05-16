@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Configuración base de axios para todas las peticiones
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+  baseURL: process.env.INTERNAL_API_URL || 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
   },
