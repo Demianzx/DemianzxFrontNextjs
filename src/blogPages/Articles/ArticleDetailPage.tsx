@@ -7,6 +7,7 @@ import { fetchPublicBlogPostBySlug, fetchBlogPostBySlug, fetchRelatedBlogPosts, 
 import ArticleMetaBar from '../../components/domain/ArticleMetaBar';
 import RelatedArticles from '../../components/domain/RelatedArticles';
 import MarkdownRenderer from '../../components/common/MarkdownRenderer';
+import UnityGameEmbed from '../../components/domain/UnityGameEmbed';
 
 interface ArticleDetailPageProps {
   id?: string;
@@ -114,6 +115,30 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ id: propId }) => 
               authorName={article.authorName || 'Autor Desconocido'}
               authorAvatar={'https://picsum.photos/100/100?random=10'} // Debería venir del usuario
             />
+            
+            {/* Apartado de juego embebido (si la publicación tiene un juego asociado) */}
+            {article.game && article.game.embedUrl && (
+              <section className="mb-10" aria-label="Juego embebido">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                    <span aria-hidden="true">🎮</span> Jugar a {article.title}
+                  </h2>
+                </div>
+                <UnityGameEmbed
+                  embedUrl={article.game.embedUrl}
+                  aspectRatio={article.game.aspectRatio}
+                  allowFullScreen={article.game.allowFullScreen}
+                  thumbnailUrl={article.featuredImageUrl || article.thumbnailImageUrl}
+                  title={article.title}
+                />
+                {article.game.instructions && (
+                  <div className="mt-4 bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-white mb-2">Controles / Cómo jugar</h3>
+                    <MarkdownRenderer content={article.game.instructions} />
+                  </div>
+                )}
+              </section>
+            )}
             
             <MarkdownRenderer content={article.content} className="prose-lg" />
             

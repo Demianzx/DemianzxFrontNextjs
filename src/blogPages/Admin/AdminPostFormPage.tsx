@@ -6,8 +6,10 @@ import Button from '../../components/common/Button';
 import SimpleMarkdownEditor from '../../components/admin/SimpleMarkdownEditor';
 import MultiSelect, { Option } from '../../components/admin/MultiSelect';
 import MediaSelectionModal from '../../components/media/MediaSelectionModal';
+import GameSectionForm, { GameSectionData } from '../../components/admin/GameSectionForm';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { createBlogPost, updateBlogPost, fetchBlogPostBySlug } from '../../store/slices/blogsSlice';
+import { createGame, updateGame, deleteGame } from '../../store/slices/gamesSlice';
 import { fetchCategories, createCategory } from '../../store/slices/categoriesSlice';
 import { fetchTags, createTag } from '../../store/slices/tagsSlice';
 import { addNotification } from '../../store/slices/uiSlice';
@@ -55,6 +57,14 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Estado del juego embebido asociado al post
+  const [gameSection, setGameSection] = useState<GameSectionData>({
+    embedUrl: '',
+    aspectRatio: '16:9',
+    allowFullScreen: true,
+    instructions: ''
+  });
+  
   // Estados para controlar los modales de selección de imágenes
   const [isFeaturedImageModalOpen, setIsFeaturedImageModalOpen] = useState(false);
   const [isThumbnailImageModalOpen, setIsThumbnailImageModalOpen] = useState(false);
@@ -80,6 +90,14 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
         categories: currentPost.categories.map(cat => ({ id: cat.id, name: cat.name })),
         tags: currentPost.tags.map(tag => ({ id: tag.id, name: tag.name })),
         status: currentPost.isPublished ? 'published' : 'draft'
+      });
+
+      // Precargar la sección de juego si el post tiene uno
+      setGameSection({
+        embedUrl: currentPost.game?.embedUrl || '',
+        aspectRatio: currentPost.game?.aspectRatio || '16:9',
+        allowFullScreen: currentPost.game?.allowFullScreen !== false,
+        instructions: currentPost.game?.instructions || ''
       });
     }
   }, [currentPost, isEditMode]);
@@ -192,6 +210,7 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
       };
       
       let resultAction;
+      let savedPostId: number | null = null;
       
       if (isEditMode && currentPost) {
         resultAction = await dispatch(updateBlogPost({
@@ -200,6 +219,7 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
         }));
         
         if (updateBlogPost.fulfilled.match(resultAction)) {
+          savedPostId = Number(currentPost.id);
           dispatch(addNotification({
             type: 'success',
             message: `Post updated successfully${publishStatus === 'published' ? ' and published' : ''}`
@@ -209,10 +229,57 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
         resultAction = await dispatch(createBlogPost(postData));
         
         if (createBlogPost.fulfilled.match(resultAction)) {
+          savedPostId = resultAction.payload as number;
           dispatch(addNotification({
             type: 'success',
             message: `Post created successfully${publishStatus === 'published' ? ' and published' : ''}`
           }));
+        }
+      }
+
+      // Sincronizar el juego embebido asociado al post (crear/actualizar/eliminar)
+      if (savedPostId != null) {
+        const existingGame = currentPost?.game;
+        const wantsGame = !!gameSection.embedUrl.trim();
+
+        if (wantsGame && !existingGame) {
+          // Crear juego nuevo
+          const gameAction = await dispatch(createGame({
+            blogPostId: savedPostId,
+            embedUrl: gameSection.embedUrl,
+            aspectRatio: gameSection.aspectRatio,
+            allowFullScreen: gameSection.allowFullScreen,
+            instructions: gameSection.instructions || undefined
+          }));
+          if (createGame.fulfilled.match(gameAction)) {
+            dispatch(addNotification({ type: 'success', message: 'Game attached to the post' }));
+          } else {
+            dispatch(addNotification({ type: 'error', message: 'Failed to attach the game to the post' }));
+          }
+        } else if (wantsGame && existingGame) {
+          // Actualizar juego existente
+          const gameAction = await dispatch(updateGame({
+            id: existingGame.id,
+            game: {
+              embedUrl: gameSection.embedUrl,
+              aspectRatio: gameSection.aspectRatio,
+              allowFullScreen: gameSection.allowFullScreen,
+              instructions: gameSection.instructions || undefined
+            }
+          }));
+          if (updateGame.fulfilled.match(gameAction)) {
+            dispatch(addNotification({ type: 'success', message: 'Game updated' }));
+          } else {
+            dispatch(addNotification({ type: 'error', message: 'Failed to update the game' }));
+          }
+        } else if (!wantsGame && existingGame) {
+          // El post tenía juego pero se quitó: eliminarlo
+          const gameAction = await dispatch(deleteGame(existingGame.id));
+          if (deleteGame.fulfilled.match(gameAction)) {
+            dispatch(addNotification({ type: 'success', message: 'Game removed from the post' }));
+          } else {
+            dispatch(addNotification({ type: 'error', message: 'Failed to remove the game' }));
+          }
         }
       }
       
@@ -398,6 +465,12 @@ const AdminPostFormPage: React.FC<AdminPostFormPageProps> = ({ slug: propSlug })
             height={400}
           />
         </div>
+        
+        {/* Juego embebido (opcional) */}
+        <GameSectionForm
+          existingGame={currentPost?.game}
+          onChange={setGameSection}
+        />
         
         {/* Botones de acción */}
         <div className="flex space-x-4">

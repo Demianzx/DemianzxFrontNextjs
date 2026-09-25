@@ -1,4 +1,5 @@
 import { BlogPostDto, BlogPostSimplifiedDto } from '../web-api-client';
+import { adaptGameSummary, GameSummary } from './gameAdapter';
 
 // Tipos que usaremos en la aplicación
 export interface BlogPost {
@@ -15,6 +16,7 @@ export interface BlogPost {
   authorName: string;
   categories: { id: number; name: string; slug: string }[];
   tags: { id: number; name: string; slug: string }[];
+  game?: GameSummary;
 }
 
 export interface BlogPostSimplified {
@@ -49,7 +51,8 @@ export const adaptBlogPost = (dto: BlogPostDto): BlogPost => {
       id: t.id || 0,
       name: t.name || '',
       slug: t.slug || ''
-    })) || []
+    })) || [],
+    game: adaptGameSummary(dto.game)
   };
 };
 

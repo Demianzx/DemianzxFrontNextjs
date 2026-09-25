@@ -81,6 +81,7 @@ const Header: React.FC = () => {
           <ul className="flex space-x-8">
           <li><Link href="/" className={`hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400' : ''}`}>Inicio</Link></li>
           <li><Link href="/articles" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}>Artículos</Link></li>
+          <li><Link href="/games" className={`hover:text-purple-400 transition-colors ${pathname && pathname.includes('/games') ? 'text-purple-400' : ''}`}>Juegos</Link></li>
             {isAdmin && (
               <li><Link href="/admin" className="hover:text-purple-400 transition-colors">Admin</Link></li>
             )}
@@ -215,8 +216,8 @@ const Header: React.FC = () => {
                 </Link>
               </li>
               <li>
-              <Link 
-                  href="/articles" 
+                <Link
+                  href="/articles"
                   className={`block hover:text-purple-400 transition-colors ${pathname && pathname.includes('/articles') ? 'text-purple-400' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -224,8 +225,17 @@ const Header: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/reviews" 
+                <Link
+                  href="/games"
+                  className={`block hover:text-purple-400 transition-colors ${pathname && pathname.includes('/games') ? 'text-purple-400' : ''}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Juegos
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/reviews"
                   className={`block hover:text-purple-400 transition-colors ${pathname && pathname.includes('/reviews') ? 'text-purple-400' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
